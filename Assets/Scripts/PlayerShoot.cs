@@ -55,6 +55,7 @@ public class PlayerShoot : MonoBehaviour
 
         BulletLogic newBulletScript = newBullet.GetComponent<BulletLogic>();
         newBulletScript.InitializeStats(
+            "Player",
             _stats.bulletVelocity, 
             _stats.range, 
             _stats.damage, 

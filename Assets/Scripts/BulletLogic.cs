@@ -8,6 +8,7 @@ public class BulletLogic : MonoBehaviour
 {
 
     [Header("Stats")]
+    [SerializeField] private string owner;
     [SerializeField] private float velocity;
     [SerializeField] private float lifetime;
     [SerializeField] private float currentLifetime;
@@ -28,8 +29,9 @@ public class BulletLogic : MonoBehaviour
         currentLifetime = lifetime;
     }
 
-    public void InitializeStats(float passedVelocity, float passedLifetime, float passedDamage, float passedCritChance, float passedCritMult)
+    public void InitializeStats(string passedOwner, float passedVelocity, float passedLifetime, float passedDamage, float passedCritChance, float passedCritMult)
     {
+        owner = passedOwner;
         velocity = passedVelocity;
         currentLifetime = passedLifetime;
         damage = passedDamage;
@@ -37,6 +39,15 @@ public class BulletLogic : MonoBehaviour
         critMultiplier = passedCritMult;
 
         rb.linearVelocity = transform.forward * velocity;
+
+        if(owner == "Player")
+        {
+            gameObject.layer = 8; //playerbullet layer
+        }
+        else
+        {
+            gameObject.layer = 10; //enemybullet layer
+        }
     }
 
     // Update is called once per frame
@@ -54,11 +65,15 @@ public class BulletLogic : MonoBehaviour
     {
         if(other.TryGetComponent(out IDamageable damageableTarget))
         {
-            float rollCrit = Random.Range(0f, 100f);
-            bool critHit = rollCrit <= critChance ? true : false;
-            if (critHit)
-            {
-                damage *= critMultiplier;
+            bool critHit = false;
+
+            if(owner == "Player" && other.CompareTag("Enemy")){
+                float rollCrit = Random.Range(0f, 100f);
+                critHit = rollCrit <= critChance ? true : false;
+                if (critHit)
+                {
+                    damage *= critMultiplier;
+                }
             }
 
             DamageInfo info = new DamageInfo
