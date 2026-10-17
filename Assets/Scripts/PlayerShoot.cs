@@ -8,12 +8,13 @@ public class PlayerShoot : MonoBehaviour
 {
 
     [Header("Stats")]
-    [SerializeField] private float fireRate = 0.5f;
-    [SerializeField] private float fireCd = 0f;
+    [SerializeField] private float fireRate;
+    [SerializeField] private float fireCd;
 
     [Header("Components")]
     [SerializeField] private InputAction shootAction;
     [SerializeField] private PlayerAim _playerAimScript;
+    [SerializeField] private PlayerStats _stats;
     [SerializeField] private GameObject origin;
     [SerializeField] private GameObject bullet;
 
@@ -22,6 +23,8 @@ public class PlayerShoot : MonoBehaviour
     void Start()
     {
         shootAction = InputSystem.actions.FindAction("Player/Attack");
+
+        fireRate = _stats.fireRate;
 
         if(origin == null || bullet == null)
         {

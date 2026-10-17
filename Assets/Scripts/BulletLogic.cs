@@ -8,22 +8,29 @@ public class BulletLogic : MonoBehaviour
 {
 
     [Header("Stats")]
-    [SerializeField] private float velocity = 0f;
-    [SerializeField] private float lifetime = 0f;
-    [SerializeField] private float currentLifetime = 0f;
-    [SerializeField] private float damage = 0f;
-    [SerializeField] private float critChance = 0f;
-    [SerializeField] private float critMultiplier = 0f;
+    [SerializeField] private float velocity;
+    [SerializeField] private float lifetime;
+    [SerializeField] private float currentLifetime;
+    [SerializeField] private float damage;
+    [SerializeField] private float critChance;
+    [SerializeField] private float critMultiplier;
     
     
 
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private PlayerStats _stats;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        velocity = _stats.bulletVelocity;
+        lifetime = _stats.range;
+        damage = _stats.damage;
+        critChance = _stats.critChance;
+        critMultiplier = _stats.critMultiplier;
 
         rb.linearVelocity = transform.forward * velocity;
         currentLifetime = lifetime;

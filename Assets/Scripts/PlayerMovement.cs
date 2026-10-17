@@ -6,11 +6,12 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Stats")]
-    [SerializeField] private float speed = 5f;
+    [SerializeField] private float speed;
 
     [Header("Components")]
     [SerializeField] private InputAction moveAction;
     [SerializeField] private Rigidbody _rb;
+    [SerializeField] private PlayerStats _stats;
 
 
     private Vector3 movement;
@@ -21,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
 
         moveAction = InputSystem.actions.FindAction("Player/Move");
+
+        speed = _stats.speed;
     }
 
     public void Update()
