@@ -50,7 +50,9 @@ MonoBehaviour:
   velocity: 5
   lifetime: 2
   currentLifetime: 0
-  damage: 0
+  damage: 10
+  critChance: 50
+  critMultiplier: 2
   rb: {fileID: 2938956808634399533}
 --- !u!54 &2938956808634399533
 Rigidbody:
@@ -94,7 +96,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2

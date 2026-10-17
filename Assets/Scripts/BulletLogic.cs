@@ -1,4 +1,5 @@
 
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assemblies;
@@ -11,6 +12,8 @@ public class BulletLogic : MonoBehaviour
     [SerializeField] private float lifetime = 0f;
     [SerializeField] private float currentLifetime = 0f;
     [SerializeField] private float damage = 0f;
+    [SerializeField] private float critChance = 0f;
+    [SerializeField] private float critMultiplier = 0f;
     
     
 
@@ -35,5 +38,28 @@ public class BulletLogic : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.TryGetComponent(out IDamageable damageableTarget))
+        {
+            float rollCrit = Random.Range(0f, 100f);
+            bool critHit = rollCrit <= critChance ? true : false;
+            if (critHit)
+            {
+                damage *= critMultiplier;
+            }
+
+            DamageInfo info = new DamageInfo
+            {
+                amount = damage,
+                isCritical = critHit
+            };
+            
+            damageableTarget.takeDamage(info);
+        }
+
+        Destroy(gameObject);
     }
 }
