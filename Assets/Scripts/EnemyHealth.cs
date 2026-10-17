@@ -1,3 +1,4 @@
+using UnityEngine.UI;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,11 +9,14 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     [Header("Components")] 
     [SerializeField] private EnemyStats _stats;
+    [SerializeField] private Image healthBarFill;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         currentHealth = _stats.maxHealth;
+
+        updateHealthBar();
     }
 
     // Update is called once per frame
@@ -32,9 +36,25 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         currentHealth -= actualDamage;
 
+        updateHealthBar();
+
         if(currentHealth <= 0f)
         {
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    public void updateHealthBar()
+    {
+        if (healthBarFill != null)
+        {
+            float healthPercentage = currentHealth / _stats.maxHealth;
+            healthBarFill.fillAmount = healthPercentage;
+        }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }
