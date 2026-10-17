@@ -52,6 +52,15 @@ public class PlayerShoot : MonoBehaviour
 
         GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
         newBullet.transform.forward = shootingDirection;
+
+        BulletLogic newBulletScript = newBullet.GetComponent<BulletLogic>();
+        newBulletScript.InitializeStats(
+            _stats.bulletVelocity, 
+            _stats.range, 
+            _stats.damage, 
+            _stats.critChance, 
+            _stats.critMultiplier
+        );
     }
 
 }

@@ -19,21 +19,24 @@ public class BulletLogic : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private PlayerStats _stats;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
 
-        velocity = _stats.bulletVelocity;
-        lifetime = _stats.range;
-        damage = _stats.damage;
-        critChance = _stats.critChance;
-        critMultiplier = _stats.critMultiplier;
+        currentLifetime = lifetime;
+    }
+
+    public void InitializeStats(float passedVelocity, float passedLifetime, float passedDamage, float passedCritChance, float passedCritMult)
+    {
+        velocity = passedVelocity;
+        currentLifetime = passedLifetime;
+        damage = passedDamage;
+        critChance = passedCritChance;
+        critMultiplier = passedCritMult;
 
         rb.linearVelocity = transform.forward * velocity;
-        currentLifetime = lifetime;
     }
 
     // Update is called once per frame
