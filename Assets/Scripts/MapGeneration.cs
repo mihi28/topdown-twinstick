@@ -12,7 +12,7 @@ public class MapGeneration : MonoBehaviour
     [SerializeField] private int width;
     [SerializeField] private float tileSize = 10;
     [SerializeField] private int maxTiles;
-    [Range(0f,1f)] private float obstacleChance;
+    [SerializeField, Range(0f, 1f)] private float obstacleChance;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject tile;
@@ -32,12 +32,12 @@ public class MapGeneration : MonoBehaviour
         navMesh = GetComponent<NavMeshSurface>();
 
         //maximum number of tiles is given by the maximum number inside the matrix minus 20%
-        maxTiles = (int)(width * height * 0.8f);
+        maxTiles = (int)(width * height * 0.7f);
         GenerateMapData();
-        PrintMatrixToConsole();
+        //PrintMatrixToConsole();
         BuildMap();
 
-        //navMesh.BuildNavMesh();
+        navMesh.BuildNavMesh();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -172,11 +172,15 @@ public class MapGeneration : MonoBehaviour
         //rotating prefabs according to which neighbours they have
         //also generate obstacles here
 
+        //offsets so the map centre is at (0,0,,0)
+        float offsetX = ((width + 2) * tileSize) / 2f;
+        float offsetZ = ((height + 2) * tileSize) / 2f;
+
         for(int x = 0; x < width + 2; x++)
         {
             for(int z = 0; z < height + 2; z++)
             {
-                Vector3 pos = new Vector3(x*tileSize, 0 , z * tileSize);
+                Vector3 pos = new Vector3(x*tileSize - offsetX, 0 , z * tileSize - offsetZ);
 
                 if(mapMatrix[x,z] != null){
 
@@ -186,27 +190,73 @@ public class MapGeneration : MonoBehaviour
                             Instantiate(tile,pos,Quaternion.identity);
                             break;
                         case 2:
-                            //walls, rotate according to which neighbours the tile does NOT have
-                            Instantiate(wallTile,pos,Quaternion.identity);
+                            //walls, rotate according to which neighbour the tile does NOT have
+                            //no neighbour down stays the same
+                            //no left rotates 90
+                            //no up rotates 180
+                            //no right rotates 270
+                            if(!mapMatrix[x,z].hasDown())
+                                Instantiate(wallTile,pos,Quaternion.identity,transform);
+                            else if(!mapMatrix[x,z].hasLeft())
+                                Instantiate(wallTile,pos,Quaternion.Euler(0,90,0),transform);
+                            else if(!mapMatrix[x,z].hasUp())
+                                Instantiate(wallTile,pos,Quaternion.Euler(0,180,0),transform);
+                            else if(!mapMatrix[x,z].hasRight())
+                                Instantiate(wallTile,pos,Quaternion.Euler(0,270,0),transform);
                             break;
                         case 3:
                             //corners, rotate according to which neighbours it DOES have
-                            Instantiate(cornerTile,pos,Quaternion.identity);
+                            //up and right stays the same
+                            //right and down 90
+                            //down and left 180
+                            //left and up 270
+                            if(mapMatrix[x,z].hasUp() && mapMatrix[x,z].hasRight())
+                                Instantiate(cornerTile,pos,Quaternion.identity,transform);
+                            else if(mapMatrix[x,z].hasRight() && mapMatrix[x,z].hasDown())
+                                Instantiate(cornerTile,pos,Quaternion.Euler(0,90,0),transform);
+                            else if(mapMatrix[x,z].hasDown() && mapMatrix[x,z].hasLeft())
+                                Instantiate(cornerTile,pos,Quaternion.Euler(0,180,0),transform);
+                            else if(mapMatrix[x,z].hasLeft() && mapMatrix[x,z].hasUp())
+                                Instantiate(cornerTile,pos,Quaternion.Euler(0,270,0),transform);
                             break;
                         case 4:
                             //hallways, rotate according to which neighbours it DOES have
-                            Instantiate(hallTile,pos,Quaternion.identity);
+                            //left and right stays the same
+                            //up and down 90
+                            if(mapMatrix[x,z].hasLeft() && mapMatrix[x,z].hasRight())
+                                Instantiate(hallTile,pos,Quaternion.identity);
+                            else if(mapMatrix[x,z].hasUp() && mapMatrix[x,z].hasDown())
+                                Instantiate(hallTile,pos,Quaternion.Euler(0,90,0),transform);
                             break;
                         case 5:
                             //rooms, rotate according to which neighbour it has
-                            Instantiate(cornerTile,pos,Quaternion.identity);
+                            // up same
+                            //right 90
+                            //down 180
+                            //left 270
+                            if(mapMatrix[x,z].hasUp())
+                                Instantiate(roomTile,pos,Quaternion.identity);
+                            else if(mapMatrix[x,z].hasRight())
+                                Instantiate(roomTile,pos,Quaternion.Euler(0,90,0),transform);
+                            else if(mapMatrix[x,z].hasDown())
+                                Instantiate(roomTile,pos,Quaternion.Euler(0,180,0),transform);
+                            else if(mapMatrix[x,z].hasLeft())
+                                Instantiate(roomTile,pos,Quaternion.Euler(0,270,0),transform);
                             break;
+                    }
+
+                if(mapMatrix[x,z].tileType != 0){
+                    float randomObstacleRoll = UnityEngine.Random.Range(0f,1f);
+                    if(randomObstacleRoll < obstacleChance)
+                        {
+                            Instantiate(obstacle,pos,Quaternion.identity,transform);
+                        }
                     }
                 }
             }
         }
     }
-    private void PrintMatrixToConsole()
+    /*private void PrintMatrixToConsole()
     {
         // Use a StringBuilder because it is much faster than adding strings together
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -231,5 +281,5 @@ public class MapGeneration : MonoBehaviour
         }
 
         Debug.Log("Map Matrix Data:\n" + sb.ToString());
-    }
+    }*/
 }
