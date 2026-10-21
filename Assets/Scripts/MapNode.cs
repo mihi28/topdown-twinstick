@@ -1,8 +1,7 @@
-
 public class MapNode
 {
-    public int x,z;
-    public int tileType;//0 empty, 1 gournd, 2 wall, 3 corner, 4 hallway, 5 room, 6 alcove
+    public int x, z;
+    public int tileType; //0 empty, 1 ground, 2 wall, 3 corner, 4 hallway, 5 room
 
     public MapNode up;
     public MapNode down;
@@ -23,35 +22,32 @@ public class MapNode
     public int noOfNeighbours()
     {
         int nr = 0;
-        if(up != null)
-            nr++;
-        if(down != null)
-            nr++;
-        if(left != null)
-            nr++;
-        if(right != null)
-            nr++;
+        if(hasDown()) nr++;
+        if(hasUp()) nr++;
+        if(hasLeft()) nr++;
+        if(hasRight()) nr++; 
 
         return nr;
     }
 
     public bool hasUp()
     {
-        return up != null ? true : false;
+        // Check if the node exists AND if it is not an empty void (0)
+        return up != null && up.tileType != 0;
     }
 
     public bool hasDown()
     {
-        return down != null ? true : false;
+        return down != null && down.tileType != 0;
     }
 
     public bool hasLeft()
     {
-        return left != null ? true : false;
+        return left != null && left.tileType != 0;
     }
     
     public bool hasRight()
     {
-        return up != null ? true : false;
+        return right != null && right.tileType != 0;
     }
 }

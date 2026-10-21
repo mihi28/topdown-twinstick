@@ -34,9 +34,10 @@ public class MapGeneration : MonoBehaviour
         //maximum number of tiles is given by the maximum number inside the matrix minus 20%
         maxTiles = (int)(width * height * 0.8f);
         GenerateMapData();
+        PrintMatrixToConsole();
         BuildMap();
 
-        navMesh.BuildNavMesh();
+        //navMesh.BuildNavMesh();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -51,12 +52,12 @@ public class MapGeneration : MonoBehaviour
         //fristly create a random drunken walk map with just floor
         
         //initializing matrix
-        width += 1;
-        height += 1; // adding +1 for padding
-        mapMatrix = new MapNode[width, height]; 
-        for(int x = 1; x < width-1; x++)
+        int mapWidth = width + 2;
+        int mapHeight = height + 2; // adding +2 for padding
+        mapMatrix = new MapNode[mapWidth, mapHeight]; 
+        for(int x = 1; x < mapWidth-1; x++)
         {
-            for(int z = 1; z < height-1; z++)
+            for(int z = 1; z < mapHeight-1; z++)
             {
                 MapNode newMapNode = new MapNode();
 
@@ -69,9 +70,9 @@ public class MapGeneration : MonoBehaviour
         }
 
         //linking neighbours
-        for (int x = 1; x < width-1; x++)
+        for (int x = 1; x < mapWidth-1; x++)
         {
-            for (int z = 1; z < height-1; z++)
+            for (int z = 1; z < mapHeight-1; z++)
             {
                 MapNode mapNode = mapMatrix[x, z];
 
@@ -83,17 +84,17 @@ public class MapGeneration : MonoBehaviour
         }
 
         //iterating through the matrix to randomly generate floor plan
-        int currentX = width/2;
-        int currentZ = height/2;
+        int currentX = mapWidth/2;
+        int currentZ = mapHeight/2;
         int tilesCreated = 0;
 
         while(tilesCreated <= maxTiles)
         {
             //if the tile lands on a spot that was already generated or is on the edge of the matrix we skip it
             if (currentX < 1) currentX = 1;
-            if (currentX > width - 1) currentX = width - 2;
+            if (currentX > mapWidth - 2) currentX = mapWidth - 2;
             if (currentZ < 1) currentZ = 1;
-            if (currentZ > height - 1) currentZ = height - 2;
+            if (currentZ > mapHeight - 2) currentZ = mapHeight - 2;
 
             //paint the floor ONLY if it's currently empty
             if(mapMatrix[currentX, currentZ].tileType == 0)
@@ -126,14 +127,12 @@ public class MapGeneration : MonoBehaviour
                     break;
                 
             }
-
-            tilesCreated ++;
         }
 
         //generate corners, hallways, rooms
-        for(int x = 1; x<width - 1; x++)
+        for(int x = 1; x<mapWidth - 1; x++)
         {
-            for(int z = 1; z<height-1; z++)
+            for(int z = 1; z<mapHeight-1; z++)
             {
                 DetermineTileType(mapMatrix[x,z]);
             }
@@ -173,69 +172,64 @@ public class MapGeneration : MonoBehaviour
         //rotating prefabs according to which neighbours they have
         //also generate obstacles here
 
-        for(int x = 1; x < width - 1; x++)
+        for(int x = 0; x < width + 2; x++)
         {
-            for(int z = 1; z < height - 1; z++)
+            for(int z = 0; z < height + 2; z++)
             {
                 Vector3 pos = new Vector3(x*tileSize, 0 , z * tileSize);
 
-                switch(mapMatrix[x, z].tileType)
-                {
-                    case 1:
-                        Instantiate(tile,pos,Quaternion.identity);
-                        break;
-                    case 2:
-                        //walls, rotate according to which neighbours the tile does NOT have
-                        Instantiate(wallTile,pos,Quaternion.identity);
-                        break;
-                    case 3:
-                        //corners, rotate according to which neighbours it DOES have
-                        Instantiate(cornerTile,pos,Quaternion.identity);
-                        break;
-                    case 4:
-                        //hallways, rotate according to which neighbours it DOES have
-                        Instantiate(hallTile,pos,Quaternion.identity);
-                        break;
-                    case 5:
-                        //rooms, rotate according to which neighbour it has
-                        Instantiate(cornerTile,pos,Quaternion.identity);
-                        break;
+                if(mapMatrix[x,z] != null){
+
+                    switch(mapMatrix[x, z].tileType)
+                    {
+                        case 1:
+                            Instantiate(tile,pos,Quaternion.identity);
+                            break;
+                        case 2:
+                            //walls, rotate according to which neighbours the tile does NOT have
+                            Instantiate(wallTile,pos,Quaternion.identity);
+                            break;
+                        case 3:
+                            //corners, rotate according to which neighbours it DOES have
+                            Instantiate(cornerTile,pos,Quaternion.identity);
+                            break;
+                        case 4:
+                            //hallways, rotate according to which neighbours it DOES have
+                            Instantiate(hallTile,pos,Quaternion.identity);
+                            break;
+                        case 5:
+                            //rooms, rotate according to which neighbour it has
+                            Instantiate(cornerTile,pos,Quaternion.identity);
+                            break;
+                    }
                 }
             }
         }
     }
-
-    [Header("Debug")]
-    public bool showDebugMatrix = true;
-
-    private void OnDrawGizmos()
+    private void PrintMatrixToConsole()
     {
-        // Don't draw if the game isn't running or the toggle is off
-        if (!showDebugMatrix || mapMatrix == null) return;
+        // Use a StringBuilder because it is much faster than adding strings together
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
 
-        for (int x = 0; x < width; x++)
+        // We loop Z backward so the "top" of the map prints at the top of the console
+        for (int z = height + 1; z >= 0; z--)
         {
-            for (int z = 0; z < height; z++)
+            for (int x = 0; x < width + 1; x++)
             {
                 MapNode node = mapMatrix[x, z];
-                if (node == null) continue;
-
-                Vector3 pos = new Vector3(x * tileSize, 1, z * tileSize); // Lifted slightly so it doesn't clip into the floor
-
-                // Assign a color based on the data type
-                switch (node.tileType)
+                
+                if (node == null)
                 {
-                    case 0: Gizmos.color = new Color(0, 0, 0, 0.1f); break; // Void (Faint Black)
-                    case 1: Gizmos.color = Color.white; break;  // Standard Tile
-                    case 2: Gizmos.color = Color.red; break;    // Wall
-                    case 3: Gizmos.color = Color.blue; break;   // Corner
-                    case 4: Gizmos.color = Color.yellow; break; // Hallway
-                    case 5: Gizmos.color = Color.green; break;  // Room
+                    sb.Append("- "); // Print a dash if the node doesn't exist (padding)
                 }
-
-                // Draw a holographic box slightly smaller than the tile size
-                Gizmos.DrawCube(pos, new Vector3(tileSize * 0.9f, 0.1f, tileSize * 0.9f));
+                else
+                {
+                    sb.Append(node.tileType + " "); // Print the raw number
+                }
             }
+            sb.AppendLine(); // Start a new line for the next row
         }
+
+        Debug.Log("Map Matrix Data:\n" + sb.ToString());
     }
 }
