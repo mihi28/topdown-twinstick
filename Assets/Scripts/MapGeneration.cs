@@ -3,6 +3,7 @@ using System;
 using Unity.AI.Navigation;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 
 public class MapGeneration : MonoBehaviour
@@ -38,6 +39,12 @@ public class MapGeneration : MonoBehaviour
         BuildMap();
 
         navMesh.BuildNavMesh();
+
+        NavMeshAgent[] allEnemies = FindObjectsByType<NavMeshAgent>();
+        foreach(NavMeshAgent enemy in allEnemies)
+{
+    enemy.enabled = true;
+}
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -187,7 +194,7 @@ public class MapGeneration : MonoBehaviour
                     switch(mapMatrix[x, z].tileType)
                     {
                         case 1:
-                            Instantiate(tile,pos,Quaternion.identity);
+                            Instantiate(tile,pos,Quaternion.identity,transform);
                             break;
                         case 2:
                             //walls, rotate according to which neighbour the tile does NOT have
@@ -224,7 +231,7 @@ public class MapGeneration : MonoBehaviour
                             //left and right stays the same
                             //up and down 90
                             if(mapMatrix[x,z].hasLeft() && mapMatrix[x,z].hasRight())
-                                Instantiate(hallTile,pos,Quaternion.identity);
+                                Instantiate(hallTile,pos,Quaternion.identity,transform);
                             else if(mapMatrix[x,z].hasUp() && mapMatrix[x,z].hasDown())
                                 Instantiate(hallTile,pos,Quaternion.Euler(0,90,0),transform);
                             break;
@@ -235,7 +242,7 @@ public class MapGeneration : MonoBehaviour
                             //down 180
                             //left 270
                             if(mapMatrix[x,z].hasUp())
-                                Instantiate(roomTile,pos,Quaternion.identity);
+                                Instantiate(roomTile,pos,Quaternion.identity,transform);
                             else if(mapMatrix[x,z].hasRight())
                                 Instantiate(roomTile,pos,Quaternion.Euler(0,90,0),transform);
                             else if(mapMatrix[x,z].hasDown())
