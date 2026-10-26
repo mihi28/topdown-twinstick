@@ -53,6 +53,10 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         }
     }
 
+    public void ResetEnemy()
+    {
+        currentHealth = _stats.maxHealth;
+    }
     private void Die()
     {
         EnemyPool.Instance.ReturnEnemy(gameObject);

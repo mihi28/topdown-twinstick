@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -23,8 +24,9 @@ public class EnemySpawner : MonoBehaviour
     void Update()
     {
         SpawnEnemy();
-        spawnCooldown -= Time.deltaTime;
-        resetTracker += Time.deltaTime;
+        spawnCooldown = Mathf.Max(0f, spawnCooldown - Time.deltaTime);
+        
+        resetTracker = Mathf.Max(0f, resetTracker - Time.deltaTime);
         NextWave();
     }
 
@@ -47,12 +49,12 @@ public class EnemySpawner : MonoBehaviour
 
     private void NextWave()
     {
-        if(currentNumberOfEnemies == maxNumberOfEnemies && resetTracker >= resetSpawnsDelay)
+        if(currentNumberOfEnemies == maxNumberOfEnemies && resetTracker <= 0)
         {
             currentNumberOfEnemies = 0;
             maxNumberOfEnemies ++;
             spawnDelay *= 0.7f;
-            resetTracker = 0;
+            resetTracker = resetSpawnsDelay;
         }
     }
 }
