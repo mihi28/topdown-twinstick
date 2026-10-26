@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using Unity.AI.Navigation;
 using Unity.Collections;
 using UnityEngine;
@@ -26,6 +27,7 @@ public class MapGeneration : MonoBehaviour
     [Header("Components")] 
     [SerializeField] private NavMeshSurface navMesh;
 
+    public static List<Vector3> SpawnableMapTilesPositions = new List<Vector3>();
     private MapNode[,] mapMatrix;
 
     void Awake()
@@ -35,16 +37,16 @@ public class MapGeneration : MonoBehaviour
         //maximum number of tiles is given by the maximum number inside the matrix minus 20%
         maxTiles = (int)(width * height * 0.7f);
         GenerateMapData();
-        //PrintMatrixToConsole();
+        PrintMatrixToConsole();
         BuildMap();
 
         navMesh.BuildNavMesh();
 
-        NavMeshAgent[] allEnemies = FindObjectsByType<NavMeshAgent>();
-        foreach(NavMeshAgent enemy in allEnemies)
-{
-    enemy.enabled = true;
-}
+        //NavMeshAgent[] allEnemies = FindObjectsByType<NavMeshAgent>();
+        //foreach(NavMeshAgent enemy in allEnemies)
+        //{
+        //    enemy.enabled = true;
+        //}
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -175,6 +177,9 @@ public class MapGeneration : MonoBehaviour
 
     public void BuildMap()
     {
+        //clear spanwamble tiles list
+        SpawnableMapTilesPositions.Clear();
+
         //iterate through the map matrix, and rotate prefabs accordingly
         //rotating prefabs according to which neighbours they have
         //also generate obstacles here
@@ -257,13 +262,20 @@ public class MapGeneration : MonoBehaviour
                     if(randomObstacleRoll < obstacleChance)
                         {
                             Instantiate(obstacle,pos,Quaternion.identity,transform);
+                            mapMatrix[x,z].isObstacle = true;
+                        }
+                    else
+                        {
+                            //save all spawnable locations (not 0 and not obstacles)
+                            SpawnableMapTilesPositions.Add(pos);
                         }
                     }
+                    
                 }
             }
         }
     }
-    /*private void PrintMatrixToConsole()
+    private void PrintMatrixToConsole()
     {
         // Use a StringBuilder because it is much faster than adding strings together
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -288,5 +300,5 @@ public class MapGeneration : MonoBehaviour
         }
 
         Debug.Log("Map Matrix Data:\n" + sb.ToString());
-    }*/
+    }
 }

@@ -55,6 +55,6 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        Destroy(gameObject);
+        EnemyPool.Instance.ReturnEnemy(gameObject);
     }
 }

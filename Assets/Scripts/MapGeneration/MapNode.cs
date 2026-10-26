@@ -2,6 +2,7 @@ public class MapNode
 {
     public int x, z;
     public int tileType; //0 empty, 1 ground, 2 wall, 3 corner, 4 hallway, 5 room
+    public bool isObstacle;
 
     public MapNode up;
     public MapNode down;
@@ -17,6 +18,7 @@ public class MapNode
         down = null;
         right = null;
         left = null;
+        isObstacle = false;
     }
 
     public int noOfNeighbours()
