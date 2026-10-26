@@ -15,8 +15,8 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] private InputAction shootAction;
     [SerializeField] private PlayerAim _playerAimScript;
     [SerializeField] private PlayerStats _stats;
-    [SerializeField] private GameObject origin;
-    [SerializeField] private GameObject bullet;
+    //[SerializeField] private GameObject origin;
+    //[SerializeField] private GameObject bullet;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -25,11 +25,6 @@ public class PlayerShoot : MonoBehaviour
         shootAction = InputSystem.actions.FindAction("Player/Attack");
 
         fireRate = _stats.fireRate;
-
-        if(origin == null || bullet == null)
-        {
-            return;
-        }
     }
 
     // Update is called once per frame
@@ -37,7 +32,7 @@ public class PlayerShoot : MonoBehaviour
     {
         if (shootAction.IsPressed() && fireCd <= 0f)
         {
-            spawnBullet(bullet);
+            spawnBullet(BulletPool.Instance.GetBullet());
         }
 
         if(fireCd > 0f)
@@ -48,13 +43,14 @@ public class PlayerShoot : MonoBehaviour
     {
         fireCd = fireRate;
         
+
         Vector3 shootingDirection = _playerAimScript.currentAimDirection;
 
-        GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
-        newBullet.transform.forward = shootingDirection;
+        bullet.transform.position = transform.position;
+        bullet.transform.forward = shootingDirection;
 
-        BulletLogic newBulletScript = newBullet.GetComponent<BulletLogic>();
-        newBulletScript.InitializeStats(
+        BulletLogic bulletScript = bullet.GetComponent<BulletLogic>();
+        bulletScript.InitializeBullet(
             "Player",
             _stats.bulletVelocity, 
             _stats.range, 

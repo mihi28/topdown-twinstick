@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assemblies;
+using UnityEngine.Pool;
 
 public class BulletLogic : MonoBehaviour
 {
@@ -21,15 +22,17 @@ public class BulletLogic : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
 
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-
         currentLifetime = lifetime;
     }
 
-    public void InitializeStats(string passedOwner, float passedVelocity, float passedLifetime, float passedDamage, float passedCritChance, float passedCritMult)
+    public void InitializeBullet(string passedOwner, float passedVelocity, float passedLifetime, float passedDamage, float passedCritChance, float passedCritMult)
     {
         owner = passedOwner;
         velocity = passedVelocity;
@@ -57,7 +60,7 @@ public class BulletLogic : MonoBehaviour
 
         if(currentLifetime <= 0f)
         {
-            Destroy(gameObject);
+            Die();
         }
     }
 
@@ -85,6 +88,11 @@ public class BulletLogic : MonoBehaviour
             damageableTarget.takeDamage(info);
         }
 
-        Destroy(gameObject);
+        Die();
+    }
+
+    public void Die()
+    {
+        BulletPool.Instance.ReturnBullet(gameObject);
     }
 }
