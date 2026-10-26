@@ -265,6 +265,7 @@ GameObject:
   m_Component:
   - component: {fileID: 189590840}
   - component: {fileID: 189590839}
+  - component: {fileID: 189590841}
   m_Layer: 0
   m_Name: MapGenerator
   m_TagString: Untagged
@@ -288,6 +289,7 @@ MonoBehaviour:
   width: 7
   tileSize: 10
   maxTiles: 0
+  obstacleChance: 0.2
   tile: {fileID: 8326960186781133971, guid: c9ed1d195a2bea14a9a47b1af34eea7a, type: 3}
   wallTile: {fileID: 3351124269821695080, guid: 28e502a8abbad4f40a4cb906a1d827d7, type: 3}
   cornerTile: {fileID: 1704513626895876690, guid: d327e5b643b29cd4a9f398fd13b3627d, type: 3}
@@ -310,6 +312,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &189590841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189590838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 0}
+  m_BuildHeightMesh: 0
 --- !u!1 &245698777
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,6 +506,7 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
+  - component: {fileID: 330585549}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -611,6 +646,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FollowingCamera
   target: {fileID: 1409087693}
   offset: {x: 0, y: 11, z: -9}
+--- !u!114 &330585549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 339e5517b5d75d3409c2e96bbff10bea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraOcclusion
+  player: {fileID: 1409087693}
+  transparentMaterial: {fileID: 2100000, guid: 7910c33caaf8f7943b8f91b8df63085d, type: 2}
+  occlusionLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  playerHeightOffset: 1
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -931,7 +984,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409087689}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 28a589dde1be53b4184d943d281615c5, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1046,7 +1099,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &1409087695
 MonoBehaviour:
   m_ObjectHideFlags: 0

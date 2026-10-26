@@ -46,6 +46,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall
       objectReference: {fileID: 0}
+    - target: {fileID: 1978908911523939885, guid: bcdc3c23d17ba124481a019e37b88c26, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978908911523939885, guid: bcdc3c23d17ba124481a019e37b88c26, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
     - target: {fileID: 6153449517139565651, guid: bcdc3c23d17ba124481a019e37b88c26, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -38,18 +38,20 @@ public class PlayerAim : MonoBehaviour
     {
         Vector2 mouseScreenPos = aimAction.ReadValue<Vector2>();
         Ray ray = camera.ScreenPointToRay(mouseScreenPos);
+        RaycastHit[] hits = Physics.RaycastAll(ray, 1000f, layerMask);
 
-        if(Physics.Raycast(ray, out RaycastHit hit, 1000f, layerMask))
+        if(hits != null)
         {
-            if (hit.collider.CompareTag("Ground"))
-            {
-                Vector3 targetPoint = hit.point;
+            foreach(RaycastHit hit in hits)
+                if (hit.collider.CompareTag("Ground"))
+                {
+                    Vector3 targetPoint = hit.point;
 
 
-                Vector3 direction = (targetPoint - pivot.transform.position).normalized;
-                direction.y = 0;
-                return direction;
-            }
+                    Vector3 direction = (targetPoint - pivot.transform.position).normalized;
+                    direction.y = 0;
+                    return direction;
+                }
         }
         return Vector3.zero;
     }
