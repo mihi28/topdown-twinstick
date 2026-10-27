@@ -5,16 +5,17 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour, IDamageable
 {
     [Header("Stats")]
-    [SerializeField] private float currentHealth = 0f;
+    [SerializeField] private float currentHealth;
 
     [Header("Components")] 
-    [SerializeField] private EnemyStats _stats;
+    [SerializeField] private EnemyStats _basestats;
     [SerializeField] private Image healthBarFill;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentHealth = _stats.maxHealth;
+        _basestats = GetComponent<EnemyStats>();
+        currentHealth = _basestats.maxHealth;
 
         updateHealthBar();
     }
@@ -25,9 +26,19 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         
     }
 
+    public void ApplyWaveScaling(float hpMult, float armorMult, float dmgMult)
+    {
+        //gets applied when spawning an enemy
+        _basestats.maxHealth *= hpMult;
+        _basestats.armour *= armorMult;
+        _basestats.damage *= dmgMult;
+
+        currentHealth = _basestats.maxHealth;
+    }
+
     public void takeDamage(DamageInfo info)
     {
-        float actualDamage = info.amount - _stats.armour;
+        float actualDamage = info.amount - _basestats.armour;
 
         if(actualDamage < 0)
         {
@@ -48,17 +59,20 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     {
         if (healthBarFill != null)
         {
-            float healthPercentage = currentHealth / _stats.maxHealth;
+            float healthPercentage = currentHealth / _basestats.maxHealth;
             healthBarFill.fillAmount = healthPercentage;
         }
     }
 
     public void ResetEnemy()
     {
-        currentHealth = _stats.maxHealth;
+        //resets ALL stats to base stats
+        currentHealth = _basestats.maxHealth;
+        updateHealthBar();
     }
     private void Die()
     {
+        WaveManager.Instance.OnEnemyDeath();
         EnemyPool.Instance.ReturnEnemy(gameObject);
     }
 }

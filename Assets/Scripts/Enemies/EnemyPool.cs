@@ -49,15 +49,23 @@ public class EnemyPool : MonoBehaviour
         if(enemyQueue.Count > 0)
         {
             GameObject obj = enemyQueue.Dequeue();
+            
+            obj.transform.position = pos; 
+
             obj.SetActive(true);
-            obj.transform.position = pos;
+
             NavMeshAgent agent = obj.GetComponent<NavMeshAgent>();
             agent.enabled = true;
+            
             return obj;
         }
         else
         {
-            GameObject obj = Instantiate(enemyPrefab, transform);
+            GameObject obj = Instantiate(enemyPrefab, pos + new Vector3(0,1,0), Quaternion.identity, transform);
+            
+            NavMeshAgent agent = obj.GetComponent<NavMeshAgent>();
+            agent.enabled = true;
+            
             return obj;
         }
     }
@@ -67,6 +75,7 @@ public class EnemyPool : MonoBehaviour
         obj.SetActive(false);
         NavMeshAgent agent = obj.GetComponent<NavMeshAgent>();
         agent.enabled = false;
+        obj.GetComponent<EnemyHealth>().ResetEnemy();
         enemyQueue.Enqueue(obj);
     }
 }

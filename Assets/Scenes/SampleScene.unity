@@ -889,6 +889,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1391172378}
   - component: {fileID: 1391172379}
+  - component: {fileID: 1391172380}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -923,12 +924,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcbe5ca6c03dece47b055779a476480f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  maxNumberOfEnemies: 4
-  currentNumberOfEnemies: 0
+  maxNumberOfEnemiesForThisWave: 0
+  numberOfSpawnedEnemiesSoFar: 0
+  maxNumberOfEnemiesAlive: 10
+  isSpawning: 0
+  waveSpawnPacingCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0029843748
+      value: 0.30142468
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.49914277
+      value: 0.8505327
+      inSlope: -0.19295137
+      outSlope: -0.19295137
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9951172
+      value: 0.4968972
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  currentIntensity: 0
+  waveDuration: 30
+  waveTimer: 0
   spawnDelay: 1
+  minDelayMultiplier: 0.2
+  maxDelayMultiplier: 2
   spawnCooldown: 0
-  resetSpawnsDelay: 30
-  resetTracker: 30
+--- !u!114 &1391172380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1391172377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7f4f61ea4ccb74ca7bb5b533a83330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaveManager
+  baseNumberOfEnemies: 10
+  enemyNumberScaler: 5
+  enemyHealthMultiplier: 0
+  enemyArmorMultiplier: 0
+  enemyDamageMultiplier: 0
+  currentWave: 1
+  currentNumberOfEnemiesAlive: 0
+  spawner: {fileID: 1391172379}
 --- !u!1 &1409087689
 GameObject:
   m_ObjectHideFlags: 0
@@ -1146,7 +1205,7 @@ MonoBehaviour:
   maxHealth: 100
   armour: 5
   speed: 7
-  damage: 10
+  damage: 50
   critChance: 20
   critMultiplier: 2
   fireRate: 0.5
