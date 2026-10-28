@@ -280,8 +280,7 @@ GameObject:
   - component: {fileID: 3385617079107168798}
   - component: {fileID: 7974573295806422187}
   - component: {fileID: -989704095880813744}
-  - component: {fileID: 2084626094040785082}
-  - component: {fileID: 8489332174919683703}
+  - component: {fileID: 3818591329965353865}
   - component: {fileID: 5757610577490497901}
   - component: {fileID: 3962630454959022733}
   m_Layer: 0
@@ -414,7 +413,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2084626094040785082
+--- !u!114 &3818591329965353865
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -426,24 +425,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd7034e2caa3dfe4383a35271376c93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
-  maxHealth: 100
-  armour: 2
-  speed: 5.5
-  damage: 10
---- !u!114 &8489332174919683703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8594934497156482078}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 691dcba8cefbfb24890275c3c1a0be19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  currentMaxHealth: 0
   currentHealth: 0
-  _basestats: {fileID: 2084626094040785082}
+  currentArmour: 0
+  currentDamage: 0
+  _basestats: {fileID: 0}
   healthBarFill: {fileID: 6487698385168941782}
 --- !u!195 &5757610577490497901
 NavMeshAgent:

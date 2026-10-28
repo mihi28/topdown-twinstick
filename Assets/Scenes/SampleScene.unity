@@ -926,7 +926,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   maxNumberOfEnemiesForThisWave: 0
   numberOfSpawnedEnemiesSoFar: 0
-  maxNumberOfEnemiesAlive: 10
+  maxNumberOfEnemiesAlive: 5
   isSpawning: 0
   waveSpawnPacingCurve:
     serializedVersion: 2
@@ -985,7 +985,7 @@ MonoBehaviour:
   enemyHealthMultiplier: 0
   enemyArmorMultiplier: 0
   enemyDamageMultiplier: 0
-  currentWave: 1
+  currentWave: 10
   currentNumberOfEnemiesAlive: 0
   spawner: {fileID: 1391172379}
 --- !u!1 &1409087689
@@ -1004,7 +1004,6 @@ GameObject:
   - component: {fileID: 1409087695}
   - component: {fileID: 1409087696}
   - component: {fileID: 1409087697}
-  - component: {fileID: 1409087698}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -1211,22 +1210,6 @@ MonoBehaviour:
   fireRate: 0.5
   range: 2
   bulletVelocity: 5
---- !u!208 &1409087698
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1409087689}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.5, y: 1, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 0
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1001 &1918583751
 PrefabInstance:
   m_ObjectHideFlags: 0

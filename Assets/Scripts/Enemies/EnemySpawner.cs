@@ -7,6 +7,8 @@ public class EnemySpawner : MonoBehaviour
     //this script handles enemies spawning, choosing how many, where and the pacing
     //in the future, should also choose the type of enemy and apply elite buffs
     //also should choose in the future if it spawns a boss 
+    [Header("Enemy Types")]
+    [SerializeField] private EnemyData enemyData;
 
     [Header("Spawning Settings")]
     [SerializeField] public int maxNumberOfEnemiesForThisWave;
@@ -100,6 +102,13 @@ public class EnemySpawner : MonoBehaviour
         //modifies their stats according to wave manager multipliers
 
         GameObject enemy = EnemyPool.Instance.GetEnemy(ChooseSpawnLocation());
+
+        if(enemy.TryGetComponent(out EnemyHandler stats))
+        {
+            stats.SetupEnemy(enemyData);
+            stats.ApplyWaveScaling(hpMult,armorMult,dmgMult);
+        }
+
         spawnCooldown = spawnDelay;
         WaveManager.Instance.currentNumberOfEnemiesAlive++;
         numberOfSpawnedEnemiesSoFar ++;

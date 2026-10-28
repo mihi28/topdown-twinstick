@@ -75,7 +75,7 @@ public class EnemyPool : MonoBehaviour
         obj.SetActive(false);
         NavMeshAgent agent = obj.GetComponent<NavMeshAgent>();
         agent.enabled = false;
-        obj.GetComponent<EnemyHealth>().ResetEnemy();
+        obj.GetComponent<EnemyHandler>().ResetEnemy();
         enemyQueue.Enqueue(obj);
     }
 }

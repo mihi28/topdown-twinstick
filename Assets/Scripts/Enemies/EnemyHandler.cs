@@ -1,21 +1,25 @@
 using UnityEngine.UI;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour, IDamageable
+public class EnemyHandler : MonoBehaviour, IDamageable
 {
     [Header("Stats")]
+    [SerializeField] private float currentMaxHealth;
     [SerializeField] private float currentHealth;
+    [SerializeField] private float currentArmour;
+    [SerializeField] private float currentDamage;
+    [SerializeField] private float currentSpeed;
+
 
     [Header("Components")] 
-    [SerializeField] private EnemyStats _basestats;
+    //[SerializeField] private EnemyData _basestats;
     [SerializeField] private Image healthBarFill;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _basestats = GetComponent<EnemyStats>();
-        currentHealth = _basestats.maxHealth;
+        //_basestats = GetComponent<EnemyStats>();
+        //SetupEnemy(_basestats);
 
         updateHealthBar();
     }
@@ -26,19 +30,31 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         
     }
 
+    public void SetupEnemy(EnemyData data)
+    {
+        //function that applies scriptable object data onto the enemy
+        currentMaxHealth = data.maxHealth;
+        currentHealth = data.maxHealth;
+        currentArmour = data.armour;
+        currentDamage = data.damage;
+        currentSpeed = data.speed;
+
+        gameObject.GetComponent<EnemyMovement>().SetSpeed(currentSpeed);
+    }
+
     public void ApplyWaveScaling(float hpMult, float armorMult, float dmgMult)
     {
         //gets applied when spawning an enemy
-        _basestats.maxHealth *= hpMult;
-        _basestats.armour *= armorMult;
-        _basestats.damage *= dmgMult;
+        currentMaxHealth *= hpMult;
+        currentArmour *= armorMult;
+        currentDamage *= dmgMult;
 
-        currentHealth = _basestats.maxHealth;
+        currentHealth = currentMaxHealth;
     }
 
     public void takeDamage(DamageInfo info)
     {
-        float actualDamage = info.amount - _basestats.armour;
+        float actualDamage = info.amount - currentArmour;
 
         if(actualDamage < 0)
         {
@@ -59,7 +75,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     {
         if (healthBarFill != null)
         {
-            float healthPercentage = currentHealth / _basestats.maxHealth;
+            float healthPercentage = currentHealth / currentMaxHealth;
             healthBarFill.fillAmount = healthPercentage;
         }
     }
@@ -67,7 +83,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public void ResetEnemy()
     {
         //resets ALL stats to base stats
-        currentHealth = _basestats.maxHealth;
+        currentHealth = currentMaxHealth;
         updateHealthBar();
     }
     private void Die()
