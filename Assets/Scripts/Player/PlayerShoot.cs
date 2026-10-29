@@ -12,6 +12,7 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] private float fireCd;
 
     [Header("Components")]
+    //[SerializeField] private GameObject player;
     [SerializeField] private InputAction shootAction;
     [SerializeField] private PlayerAim _playerAimScript;
     [SerializeField] private PlayerStats _stats;
@@ -35,8 +36,7 @@ public class PlayerShoot : MonoBehaviour
             spawnBullet(BulletPool.Instance.GetBullet());
         }
 
-        if(fireCd > 0f)
-            fireCd -= Time.deltaTime;
+        fireCd = Mathf.Max(0, fireCd - Time.deltaTime);
     }
 
     public void spawnBullet(GameObject bullet)
@@ -53,6 +53,7 @@ public class PlayerShoot : MonoBehaviour
         bulletScript.InitializeBullet(
             "Player",
             _stats.bulletVelocity, 
+            //player.GetComponent<PlayerMovement>().getPlayerVelocity(),
             _stats.range, 
             _stats.damage, 
             _stats.critChance, 

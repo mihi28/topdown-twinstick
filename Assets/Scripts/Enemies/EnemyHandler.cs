@@ -1,5 +1,6 @@
 using UnityEngine.UI;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class EnemyHandler : MonoBehaviour, IDamageable
 {
@@ -9,11 +10,18 @@ public class EnemyHandler : MonoBehaviour, IDamageable
     [SerializeField] private float currentArmour;
     [SerializeField] private float currentDamage;
     [SerializeField] private float currentSpeed;
+    [SerializeField] public bool isElite;
 
 
     [Header("Components")] 
     //[SerializeField] private EnemyData _basestats;
     [SerializeField] private Image healthBarFill;
+    [SerializeField] private MeshRenderer meshRenderer;
+
+    void Awake()
+    {
+        meshRenderer = GetComponent<MeshRenderer>();
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -38,8 +46,16 @@ public class EnemyHandler : MonoBehaviour, IDamageable
         currentArmour = data.armour;
         currentDamage = data.damage;
         currentSpeed = data.speed;
+        isElite = false;
 
         gameObject.GetComponent<EnemyMovement>().SetSpeed(currentSpeed);
+
+        //visual part
+        meshRenderer.materials = new Material[]
+                                {
+                                    data.material
+                                };
+        gameObject.transform.localScale = new Vector3(data.scale,data.scale,data.scale);
     }
 
     public void ApplyWaveScaling(float hpMult, float armorMult, float dmgMult)
@@ -50,6 +66,27 @@ public class EnemyHandler : MonoBehaviour, IDamageable
         currentDamage *= dmgMult;
 
         currentHealth = currentMaxHealth;
+    }
+
+    public void ApplyEliteStats(EliteData data)
+    {
+        currentMaxHealth *= data.healthMultiplier;
+        currentArmour *= data.armourMultiplier;
+        currentDamage *= data.damageMultiplier;
+        currentSpeed *= data.speedMultiplier;
+        isElite = true;
+
+        gameObject.GetComponent<EnemyMovement>().SetSpeed(currentSpeed);
+
+        //visual part
+        Material tintMaterial = data.material;
+        tintMaterial.SetColor("_color", data.color);
+        meshRenderer.materials = new Material[]
+                                {
+                                    meshRenderer.material,
+                                    tintMaterial,
+                                };
+        gameObject.transform.localScale = new Vector3(data.scale,data.scale,data.scale);
     }
 
     public void takeDamage(DamageInfo info)

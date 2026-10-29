@@ -7,8 +7,10 @@ public class EnemySpawner : MonoBehaviour
     //this script handles enemies spawning, choosing how many, where and the pacing
     //in the future, should also choose the type of enemy and apply elite buffs
     //also should choose in the future if it spawns a boss 
-    [Header("Enemy Types")]
+    [Header("Enemy Data")]
     [SerializeField] private EnemyData enemyData;
+    [SerializeField] private EliteData eliteData;
+    [SerializeField, Range(0f,1f)] private float eliteSpawnChance;
 
     [Header("Spawning Settings")]
     [SerializeField] public int maxNumberOfEnemiesForThisWave;
@@ -106,6 +108,13 @@ public class EnemySpawner : MonoBehaviour
         if(enemy.TryGetComponent(out EnemyHandler stats))
         {
             stats.SetupEnemy(enemyData);
+
+            float randomEliteChanceRoll = Random.Range(0f,1f);
+            if(randomEliteChanceRoll <= eliteSpawnChance)
+            {
+                stats.ApplyEliteStats(eliteData);
+            }
+
             stats.ApplyWaveScaling(hpMult,armorMult,dmgMult);
         }
 

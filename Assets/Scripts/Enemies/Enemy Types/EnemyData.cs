@@ -11,5 +11,9 @@ public class EnemyData : ScriptableObject
     [SerializeField] public float armour;
     [SerializeField] public float speed;
     [SerializeField] public float damage;
+    [SerializeField] public bool isElite;
     
+    [Header("Visual")]
+    [SerializeField] public Material material;
+    [SerializeField] public float scale;
 }

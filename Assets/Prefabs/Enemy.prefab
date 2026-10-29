@@ -429,7 +429,7 @@ MonoBehaviour:
   currentHealth: 0
   currentArmour: 0
   currentDamage: 0
-  _basestats: {fileID: 0}
+  currentSpeed: 0
   healthBarFill: {fileID: 6487698385168941782}
 --- !u!195 &5757610577490497901
 NavMeshAgent:

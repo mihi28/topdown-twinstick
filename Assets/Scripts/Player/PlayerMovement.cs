@@ -36,4 +36,9 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb.linearVelocity = new Vector3(movement.x * speed, _rb.linearVelocity.y, movement.z * speed);
     }
+
+    public Vector3 getPlayerVelocity()
+    {
+        return _rb.linearVelocity;
+    }
 }

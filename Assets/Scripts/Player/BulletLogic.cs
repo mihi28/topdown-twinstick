@@ -41,7 +41,7 @@ public class BulletLogic : MonoBehaviour
         critChance = passedCritChance;
         critMultiplier = passedCritMult;
 
-        rb.linearVelocity = transform.forward * velocity;
+        rb.linearVelocity = (transform.forward * velocity);// + playerVelocity;
 
         if(owner == "Player")
         {

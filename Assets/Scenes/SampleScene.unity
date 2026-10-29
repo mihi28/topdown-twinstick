@@ -924,6 +924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcbe5ca6c03dece47b055779a476480f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  enemyData: {fileID: 11400000, guid: ec9aff60ac36e38459fbd66f9c04bca4, type: 2}
   maxNumberOfEnemiesForThisWave: 0
   numberOfSpawnedEnemiesSoFar: 0
   maxNumberOfEnemiesAlive: 5
@@ -982,10 +983,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WaveManager
   baseNumberOfEnemies: 10
   enemyNumberScaler: 5
-  enemyHealthMultiplier: 0
-  enemyArmorMultiplier: 0
-  enemyDamageMultiplier: 0
-  currentWave: 10
+  enemyHealthMultiplier: 1.1
+  enemyArmorMultiplier: 1.01
+  enemyDamageMultiplier: 1.01
+  currentWave: 1
   currentNumberOfEnemiesAlive: 0
   spawner: {fileID: 1391172379}
 --- !u!1 &1409087689
