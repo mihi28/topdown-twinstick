@@ -17,3 +17,6 @@ MonoBehaviour:
   armour: 5
   speed: 5.5
   damage: 10
+  isElite: 0
+  material: {fileID: 2100000, guid: 72c60958fd0e2e3479fd5924279e5458, type: 2}
+  scale: 1

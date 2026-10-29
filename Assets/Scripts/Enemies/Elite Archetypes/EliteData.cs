@@ -13,6 +13,6 @@ public class EliteData : ScriptableObject
 
     [Header("Visual")]
     public Material material;
-    public Color color;
+    //public Color color;
     public float scale;
 }

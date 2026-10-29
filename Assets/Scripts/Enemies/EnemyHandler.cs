@@ -79,12 +79,10 @@ public class EnemyHandler : MonoBehaviour, IDamageable
         gameObject.GetComponent<EnemyMovement>().SetSpeed(currentSpeed);
 
         //visual part
-        Material tintMaterial = data.material;
-        tintMaterial.SetColor("_color", data.color);
         meshRenderer.materials = new Material[]
                                 {
                                     meshRenderer.material,
-                                    tintMaterial,
+                                    data.material,
                                 };
         gameObject.transform.localScale = new Vector3(data.scale,data.scale,data.scale);
     }
@@ -92,11 +90,6 @@ public class EnemyHandler : MonoBehaviour, IDamageable
     public void takeDamage(DamageInfo info)
     {
         float actualDamage = info.amount - currentArmour;
-
-        if(actualDamage < 0)
-        {
-            actualDamage = 0;
-        }
 
         currentHealth -= actualDamage;
 

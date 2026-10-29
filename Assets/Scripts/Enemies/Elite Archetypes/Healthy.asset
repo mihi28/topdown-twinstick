@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Healthy
   m_EditorClassIdentifier: Assembly-CSharp::EliteData
   eliteType: 
-  healthMultiplier: 2
-  armourMultiplier: 1.5
-  damageMultiplier: 0.7
-  speedMultiplier: 0.8
-  material: {fileID: 0}
-  scale: 0
+  healthMultiplier: 4
+  armourMultiplier: 0.5
+  damageMultiplier: 0.5
+  speedMultiplier: 0.5
+  material: {fileID: 2100000, guid: 7dda13182815113458f0c4542feb0560, type: 2}
+  scale: 1.5

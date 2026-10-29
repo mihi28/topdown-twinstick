@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -9,7 +10,7 @@ public class EnemySpawner : MonoBehaviour
     //also should choose in the future if it spawns a boss 
     [Header("Enemy Data")]
     [SerializeField] private EnemyData enemyData;
-    [SerializeField] private EliteData eliteData;
+    [SerializeField] private List<EliteData> eliteData;
     [SerializeField, Range(0f,1f)] private float eliteSpawnChance;
 
     [Header("Spawning Settings")]
@@ -109,10 +110,13 @@ public class EnemySpawner : MonoBehaviour
         {
             stats.SetupEnemy(enemyData);
 
+            //roll for elite spawn chance
             float randomEliteChanceRoll = Random.Range(0f,1f);
             if(randomEliteChanceRoll <= eliteSpawnChance)
             {
-                stats.ApplyEliteStats(eliteData);
+                //choose a random elite archetype
+                int randomIndex = Random.Range(0, eliteData.Count);
+                stats.ApplyEliteStats(eliteData[randomIndex]);
             }
 
             stats.ApplyWaveScaling(hpMult,armorMult,dmgMult);
