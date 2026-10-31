@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b85fe11cecccf74a968dd45890aab20, type: 3}
   m_Name: Speedy
   m_EditorClassIdentifier: Assembly-CSharp::EliteData
-  eliteType: 
-  healthMultiplier: 0
-  armourMultiplier: 0
-  damageMultiplier: 0
-  speedMultiplier: 0
-  material: {fileID: 0}
-  scale: 0
+  eliteType: Speedy
+  healthMultiplier: 0.5
+  armourMultiplier: 1
+  damageMultiplier: 1
+  speedMultiplier: 2
+  material: {fileID: 2100000, guid: 7dda13182815113458f0c4542feb0560, type: 2}
+  scale: 0.7

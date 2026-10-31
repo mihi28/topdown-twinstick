@@ -8,14 +8,14 @@ public class WaveManager : MonoBehaviour
     public static WaveManager Instance;
 
     [Header("Wave Settings")]
-    [SerializeField] private int baseNumberOfEnemies;
-    [SerializeField] private int enemyNumberScaler;
-    [SerializeField] private float enemyHealthMultiplier;
-    [SerializeField] private float enemyArmorMultiplier;
-    [SerializeField] private float enemyDamageMultiplier;
+    [SerializeField] private int baseNumberOfCredits;
+    [SerializeField] private int creditScaler; //scales linearly
+    [SerializeField] private float enemyHealthScaler;
+    [SerializeField] private float enemyArmorScaler;
+    [SerializeField] private float enemyDamageScaler;
 
-    [Header("WaveProgression")]
-    [SerializeField] private int currentWave = 1;
+    [Header("Wave Progression")]
+    [SerializeField] public int currentWave = 1;
     [SerializeField] public int currentNumberOfEnemiesAlive;
 
     [Header("Components")]
@@ -43,11 +43,12 @@ public class WaveManager : MonoBehaviour
     private void StartWave()
     {
         //scale up enemy stats and numbers based on wave
-        //here we can choose wether its a boss wave or not
-        int numberOFEnemies = baseNumberOfEnemies + (enemyNumberScaler * (currentWave - 1));
-        float currenHPMult = 1f + (enemyHealthMultiplier * (currentWave - 1));
-        float currenarmMult = 1f + (enemyArmorMultiplier * (currentWave - 1));
-        float currendmgMult = 1f + (enemyDamageMultiplier * (currentWave - 1));
+
+        //stats scale linearly but as an exponent
+        int numberOFEnemies = baseNumberOfCredits + (creditScaler * (currentWave - 1));
+        float currenHPMult = 1f + (enemyHealthScaler * (currentWave - 1));
+        float currenarmMult = 1f + (enemyArmorScaler * (currentWave - 1));
+        float currendmgMult = 1f + (enemyDamageScaler * (currentWave - 1));
 
         spawner.StartSpawning(numberOFEnemies, currenHPMult, currenarmMult, currendmgMult);
     }

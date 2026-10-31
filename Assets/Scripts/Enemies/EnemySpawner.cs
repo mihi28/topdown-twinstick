@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using UnityEngine;
 
 
@@ -8,15 +9,21 @@ public class EnemySpawner : MonoBehaviour
     //this script handles enemies spawning, choosing how many, where and the pacing
     //in the future, should also choose the type of enemy and apply elite buffs
     //also should choose in the future if it spawns a boss 
-    [Header("Enemy Data")]
-    [SerializeField] private EnemyData enemyData;
-    [SerializeField] private List<EliteData> eliteData;
-    [SerializeField, Range(0f,1f)] private float eliteSpawnChance;
+    [Header("Wave Data")]
+    [SerializeField] private int currentWave;
+    [SerializeField] private WaveData defaultWave;
+    [SerializeField] private List<WaveData> specialWaves;
+    [SerializeField] private EnemyRoster currentEnemyRoster;
+    [SerializeField] private List<EliteData> currentAvailableElites;
+    [SerializeField, Range(0f,1f)] private float currentEliteSpawnChance;
+    //[SerializeField] private int eliteUpgradeCost;
 
     [Header("Spawning Settings")]
-    [SerializeField] public int maxNumberOfEnemiesForThisWave;
-    [SerializeField] public int numberOfSpawnedEnemiesSoFar;
+    [SerializeField] public int maxNumberOfCreditsForThisWave;
+    [SerializeField] public int numberOfAvailableCredits;
     [SerializeField] private int maxNumberOfEnemiesAlive; //gate it so there arent too many enemies at once
+    [SerializeField] private float eliteSpawnMultiplier; //the number the spawn chance grows by each wave
+    [SerializeField] private float maxEliteSpawnChance; //gate it so it's never 100%
     [SerializeField] public bool isSpawning;
 
     [Header("Pacing Settings")]
@@ -25,11 +32,10 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float waveDuration;
     [SerializeField] private float waveTimer;
     [SerializeField] private float spawnDelay;
+    [SerializeField] public float spawnCooldown;
     [SerializeField] private float minDelayMultiplier;
     [SerializeField] private float maxDelayMultiplier;
-    [SerializeField] public float spawnCooldown;
-
-
+    
 
     private float hpMult;
     private float armorMult;
@@ -46,7 +52,7 @@ public class EnemySpawner : MonoBehaviour
         if(!isSpawning) return;
 
         //if there are less enemies currently alive than the max number and not all the enemies have been spawned then spawn enemies
-        if(WaveManager.Instance.currentNumberOfEnemiesAlive < maxNumberOfEnemiesAlive && numberOfSpawnedEnemiesSoFar < maxNumberOfEnemiesForThisWave)
+        if(WaveManager.Instance.currentNumberOfEnemiesAlive < maxNumberOfEnemiesAlive && numberOfAvailableCredits > 0)
         {
             if(spawnCooldown <= 0){
                 SpawnEnemy();
@@ -57,7 +63,7 @@ public class EnemySpawner : MonoBehaviour
                 float currentWaveProgress = waveTimer/waveDuration;
                 currentIntensity = waveSpawnPacingCurve.Evaluate(currentWaveProgress);
 
-                float averageDelay = waveDuration / (float)maxNumberOfEnemiesForThisWave;
+                float averageDelay = waveDuration / (float)maxNumberOfCreditsForThisWave;
                 float minDelay = averageDelay * minDelayMultiplier;
                 float maxDelay = averageDelay * maxDelayMultiplier;
 
@@ -66,24 +72,26 @@ public class EnemySpawner : MonoBehaviour
                 spawnCooldown = spawnDelay;
             }
 
-            //if the number of enemies spawned this wave reaches max number for this wave, stop spawning
-            if(numberOfSpawnedEnemiesSoFar == maxNumberOfEnemiesForThisWave)
+            //if spent all credits, stop spawning
+            if(numberOfAvailableCredits == 0)
             {
                 StopSpawning();
             }
 
             //only count down timers if the max number of enemies alive at a time hasnt been reached
-            spawnCooldown = Mathf.Max(0, spawnCooldown - Time.deltaTime);
-            waveTimer = Mathf.Min(waveDuration, waveTimer + Time.deltaTime);
+            spawnCooldown = Mathf.Max(0, spawnCooldown - Time.deltaTime); //counting down
+            waveTimer = Mathf.Min(waveDuration, waveTimer + Time.deltaTime); //counting up
         }
         
     }
 
-    public void StartSpawning(int numberOFEnemies, float hpMult, float armorMult, float dmgMult)
+    public void StartSpawning(int numberOFCredits, float hpMult, float armorMult, float dmgMult)
     {
-        //starts the spawning process, using data given by wavemanager
-        maxNumberOfEnemiesForThisWave = numberOFEnemies;
-        maxNumberOfEnemiesAlive = (int)(maxNumberOfEnemiesForThisWave * 0.8f);
+        //starts the spawning process, sets wave data, using data given by wavemanager
+        SetupWaveVariables();
+
+        maxNumberOfCreditsForThisWave = numberOFCredits;
+        maxNumberOfEnemiesAlive = Mathf.Min(30,(int)(maxNumberOfCreditsForThisWave * 0.8f)); //min of 80% or 30 enemies
         this.hpMult = hpMult;
         this.armorMult = armorMult;
         this.dmgMult = dmgMult;
@@ -91,7 +99,8 @@ public class EnemySpawner : MonoBehaviour
         isSpawning = true;
         waveTimer = 0; 
         spawnCooldown = 1f; //brief delay before starting to sapwn
-        numberOfSpawnedEnemiesSoFar = 0;
+        numberOfAvailableCredits = maxNumberOfCreditsForThisWave;
+
     }
 
     public void StopSpawning()
@@ -99,32 +108,76 @@ public class EnemySpawner : MonoBehaviour
         isSpawning = false;
     }
 
+    private EnemySpawnCost ChooseEnemyToSpawn(int availableCredits)
+    {
+        //function to choose which enemy to spawn
+        //returns an EnemySpawnCost object that has enemy data and it s cost
+
+        //filter out available enemies
+        List<EnemySpawnCost> affordableEnemies = currentEnemyRoster.availableEnemies.FindAll(e => e.cost <= availableCredits);
+
+        // If the list is empty, we are too broke to buy anything else. End the wave.
+        if (affordableEnemies.Count == 0)
+        {
+            return null;
+        }
+
+        // pick a random base enemy from the affordable list
+        int randomIndex = Random.Range(0, affordableEnemies.Count);
+        EnemySpawnCost chosenEnemy = affordableEnemies[randomIndex];
+        return chosenEnemy;
+    }
+
     private void SpawnEnemy()
     {
         //spawns an enemy on a random position on the map
         //modifies their stats according to wave manager multipliers
 
-        GameObject enemy = EnemyPool.Instance.GetEnemy(ChooseSpawnLocation());
+        GameObject enemyEntity = EnemyPool.Instance.GetEnemy(ChooseSpawnLocation());
 
-        if(enemy.TryGetComponent(out EnemyHandler stats))
+        if(enemyEntity.TryGetComponent(out EnemyHandler handler))
         {
-            stats.SetupEnemy(enemyData);
+            //first choose which enemy to spawn
+            EnemySpawnCost enemyToSpawn = ChooseEnemyToSpawn(numberOfAvailableCredits);
 
-            //roll for elite spawn chance
-            float randomEliteChanceRoll = Random.Range(0f,1f);
-            if(randomEliteChanceRoll <= eliteSpawnChance)
+            //if it's different than null then we can spawn an enemy, otherwise no more enemies and the wave is ended
+
+            if(enemyToSpawn != null)
             {
-                //choose a random elite archetype
-                int randomIndex = Random.Range(0, eliteData.Count);
-                stats.ApplyEliteStats(eliteData[randomIndex]);
-            }
+                int totalCost = enemyToSpawn.cost;
 
-            stats.ApplyWaveScaling(hpMult,armorMult,dmgMult);
+                //elite upgrade cost is 50% rounded up, might change that later
+                int eliteUpgradeCost = Mathf.CeilToInt(enemyToSpawn.cost * 0.5f);
+
+                //dress up enemy entity with chosen enemy data
+                handler.SetupEnemy(enemyToSpawn.enemyData);
+
+                //roll for elite spawn chance, if we can afford the elite upgrade
+                if(totalCost + eliteUpgradeCost <= numberOfAvailableCredits)
+                {
+                    //roll for elite upgrade
+                    float randomEliteChanceRoll = Random.Range(0f,1f);
+                    if(randomEliteChanceRoll <= currentEliteSpawnChance)
+                    {
+                        //choose a random elite archetype
+                        int randomIndex = Random.Range(0, currentAvailableElites.Count);
+                        handler.ApplyEliteStats(currentAvailableElites[randomIndex]);
+
+                        //apply elite ugrade cost
+                        totalCost += eliteUpgradeCost;
+                    }
+
+                    handler.ApplyWaveScaling(hpMult,armorMult,dmgMult);
+                }
+
+                spawnCooldown = spawnDelay;
+                WaveManager.Instance.currentNumberOfEnemiesAlive++;
+                numberOfAvailableCredits -= totalCost;
+                
+            }
+            
         }
 
-        spawnCooldown = spawnDelay;
-        WaveManager.Instance.currentNumberOfEnemiesAlive++;
-        numberOfSpawnedEnemiesSoFar ++;
     }
 
     private Vector3 ChooseSpawnLocation()
@@ -132,6 +185,29 @@ public class EnemySpawner : MonoBehaviour
         //chooses a random position on the map
         int i = UnityEngine.Random.Range(0, MapGeneration.SpawnableMapTilesPositions.Count);
         return MapGeneration.SpawnableMapTilesPositions[i];
+    }
+
+    public void SetupWaveVariables()
+    {
+        //initialize all wave data
+        currentWave = WaveManager.Instance.currentWave;
+
+        WaveData waveToUse = defaultWave;
+
+        foreach (WaveData specialWave in specialWaves)
+        {
+            if (specialWave.waveNumber == currentWave)
+            {
+                waveToUse = specialWave;
+                break;
+            }
+        }
+
+        currentEnemyRoster = waveToUse.roster;
+        currentAvailableElites = waveToUse.availableElites;
+
+        //elite spawn chance increases exponentially every wave, certain waves have 0 spawn chance
+        currentEliteSpawnChance = Mathf.Min(maxEliteSpawnChance, waveToUse.eliteSpawnChance * Mathf.Pow(eliteSpawnMultiplier, currentWave - 1));
     }
 
 }

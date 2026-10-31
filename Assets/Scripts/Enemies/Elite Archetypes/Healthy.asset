@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b85fe11cecccf74a968dd45890aab20, type: 3}
   m_Name: Healthy
   m_EditorClassIdentifier: Assembly-CSharp::EliteData
-  eliteType: 
+  eliteType: Healthy
   healthMultiplier: 4
   armourMultiplier: 0.5
   damageMultiplier: 0.5
   speedMultiplier: 0.5
-  material: {fileID: 2100000, guid: 7dda13182815113458f0c4542feb0560, type: 2}
+  material: {fileID: 2100000, guid: 859045517a8b0164c8e337d589a85d00, type: 2}
   scale: 1.5
