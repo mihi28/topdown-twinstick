@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fac688bb5ba406b438adab627195a461, type: 3}
   m_Name: DefaultEnemyRoster
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRoster
-  availableEnemies: []
+  availableEnemies:
+  - enemyData: {fileID: 11400000, guid: ec9aff60ac36e38459fbd66f9c04bca4, type: 2}
+    cost: 1

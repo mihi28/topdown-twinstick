@@ -6,17 +6,16 @@ public class FollowingCamera : MonoBehaviour
 {
     [Header("Follow Target")]
     [SerializeField] private Transform target;
-    [SerializeField] private Vector3 offset = new Vector3(0f,0f,0f);
+    [SerializeField] private float distanceFromPlayer;
 
-    public void Update(){
+    public void LateUpdate(){
         
         if(target == null)
         {
             return;
         }
 
-        transform.position = target.transform.position + offset;
-        transform.LookAt(target);
+        transform.position = target.position - (transform.forward * distanceFromPlayer);
         
     }
 }

@@ -615,13 +615,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.13638268, y: 0.005049557, z: -0.00069839513, w: -0.99064314}
+  m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
   m_LocalPosition: {x: -0.30133623, y: 6.247151, z: -12.139076}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -679,7 +679,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FollowingCamera
   target: {fileID: 1409087693}
-  offset: {x: 0, y: 10, z: -10}
+  distanceFromPlayer: 30
 --- !u!114 &330585549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -697,7 +697,7 @@ MonoBehaviour:
   occlusionLayer:
     serializedVersion: 2
     m_Bits: 2048
-  playerHeightOffset: 1
+  playerHeightOffset: -0.5
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -924,14 +924,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcbe5ca6c03dece47b055779a476480f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemyData: {fileID: 11400000, guid: ec9aff60ac36e38459fbd66f9c04bca4, type: 2}
-  eliteData:
-  - {fileID: 11400000, guid: 8d5c17c450068c949a8cfbe67c7c65c3, type: 2}
-  - {fileID: 11400000, guid: 6e759b336c5075d46b3cf5a48b85c3ce, type: 2}
-  eliteSpawnChance: 0.636
-  maxNumberOfEnemiesForThisWave: 0
-  numberOfSpawnedEnemiesSoFar: 0
+  currentWave: 0
+  defaultWave: {fileID: 11400000, guid: c98ebae44068e7946a8cf796078b5da9, type: 2}
+  specialWaves:
+  - {fileID: 11400000, guid: 4327ec949f1296848bc0688d6cd84496, type: 2}
+  currentEnemyRoster: {fileID: 0}
+  currentAvailableElites: []
+  currentEliteSpawnChance: 0
+  maxNumberOfCreditsForThisWave: 0
+  numberOfAvailableCredits: 0
   maxNumberOfEnemiesAlive: 5
+  eliteSpawnMultiplier: 1.1
+  maxEliteSpawnChance: 0.8
   isSpawning: 0
   waveSpawnPacingCurve:
     serializedVersion: 2
@@ -979,9 +983,9 @@ MonoBehaviour:
   waveDuration: 30
   waveTimer: 0
   spawnDelay: 1
+  spawnCooldown: 0
   minDelayMultiplier: 0.2
   maxDelayMultiplier: 2
-  spawnCooldown: 0
 --- !u!114 &1391172380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -994,8 +998,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf7f4f61ea4ccb74ca7bb5b533a83330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveManager
-  baseNumberOfEnemies: 10
-  enemyNumberScaler: 5
+  baseNumberOfCredits: 10
+  creditScaler: 5
   enemyHealthScaler: 0.1
   enemyArmorScaler: 0.01
   enemyDamageScaler: 0.01
@@ -1032,7 +1036,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409087689}
-  m_Material: {fileID: 13400000, guid: 28a589dde1be53b4184d943d281615c5, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
