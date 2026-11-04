@@ -29,7 +29,7 @@ public class BulletLogic : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentLifetime = lifetime;
+        //currentLifetime = lifetime;
     }
 
     public void InitializeBullet(string passedOwner, float passedVelocity, float passedLifetime, float passedDamage, float passedCritChance, float passedCritMult)
