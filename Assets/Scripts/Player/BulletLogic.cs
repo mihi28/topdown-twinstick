@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assemblies;
 using UnityEngine.Pool;
+using UnityEngine.Rendering;
 
 public class BulletLogic : MonoBehaviour
 {
@@ -17,8 +18,6 @@ public class BulletLogic : MonoBehaviour
     [SerializeField] private float critChance;
     [SerializeField] private float critMultiplier;
     
-    
-
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
 
@@ -41,7 +40,7 @@ public class BulletLogic : MonoBehaviour
         critChance = passedCritChance;
         critMultiplier = passedCritMult;
 
-        rb.linearVelocity = (transform.forward * velocity);// + playerVelocity;
+        rb.linearVelocity = (transform.forward * velocity);
 
         if(owner == "Player")
         {
@@ -66,10 +65,13 @@ public class BulletLogic : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+
         if(other.TryGetComponent(out IDamageable damageableTarget))
         {
             bool critHit = false;
+            GetComponent<Collider>().enabled = false; // disable collider so it doesnt hit multiple things at once
 
+            //check if the player shot an enemy and roll for a crit
             if(owner == "Player" && other.CompareTag("Enemy")){
                 float rollCrit = Random.Range(0f, 100f);
                 critHit = rollCrit <= critChance ? true : false;
@@ -79,6 +81,7 @@ public class BulletLogic : MonoBehaviour
                 }
             }
 
+            //pass on damage to the enemy
             DamageInfo info = new DamageInfo
             {
                 amount = damage,
@@ -86,6 +89,7 @@ public class BulletLogic : MonoBehaviour
             };
             
             damageableTarget.takeDamage(info);
+
         }
 
         Die();

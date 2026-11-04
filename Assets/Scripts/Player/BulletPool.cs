@@ -30,6 +30,7 @@ public class BulletPool : MonoBehaviour
         if(bulletQueue.Count > 0)
         {
             GameObject obj = bulletQueue.Dequeue();
+            obj.GetComponent<Collider>().enabled = true; // reset it's collider when it spawn again
             obj.SetActive(true);
             return obj;
         }

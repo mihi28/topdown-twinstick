@@ -1,6 +1,8 @@
 using UnityEngine.UI;
 using UnityEngine;
 using Unity.VisualScripting;
+using System;
+using UnityEngine.AI;
 
 public class EnemyHandler : MonoBehaviour, IDamageable
 {
@@ -9,26 +11,30 @@ public class EnemyHandler : MonoBehaviour, IDamageable
     [SerializeField] private float currentHealth;
     [SerializeField] private float currentArmour;
     [SerializeField] private float currentDamage;
-    [SerializeField] private float currentSpeed;
+    [field: SerializeField] public float currentSpeed {get; private set;}
     [SerializeField] public bool isElite;
+
+    [Header("AI Behavior Stats")]
+    //[field: SerializeField] public EnemyAttackType AttackType { get; private set; }
+    //[field: SerializeField] public float attackRange { get; private set; }
+    //[field: SerializeField] public float attackCooldown { get; private set; }
 
 
     [Header("Components")] 
     //[SerializeField] private EnemyData _basestats;
     [SerializeField] private Image healthBarFill;
     [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private NavMeshAgent agent;
 
     void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //_basestats = GetComponent<EnemyStats>();
-        //SetupEnemy(_basestats);
-
         updateHealthBar();
     }
 
@@ -41,6 +47,7 @@ public class EnemyHandler : MonoBehaviour, IDamageable
     public void SetupEnemy(EnemyData data)
     {
         //function that applies scriptable object data onto the enemy
+
         currentMaxHealth = data.maxHealth;
         currentHealth = data.maxHealth;
         currentArmour = data.armour;
@@ -48,14 +55,15 @@ public class EnemyHandler : MonoBehaviour, IDamageable
         currentSpeed = data.speed;
         isElite = false;
 
-        gameObject.GetComponent<EnemyMovement>().SetSpeed(currentSpeed);
-
         //visual part
         meshRenderer.materials = new Material[]
                                 {
                                     data.material
                                 };
         gameObject.transform.localScale = new Vector3(data.scale,data.scale,data.scale);
+
+        //setup agent speed so it calculates it's path correctly
+        agent.speed = currentSpeed;
     }
 
     public void ApplyWaveScaling(float hpMult, float armorMult, float dmgMult)
@@ -76,8 +84,6 @@ public class EnemyHandler : MonoBehaviour, IDamageable
         currentSpeed *= data.speedMultiplier;
         isElite = true;
 
-        gameObject.GetComponent<EnemyMovement>().SetSpeed(currentSpeed);
-
         //visual part
         meshRenderer.materials = new Material[]
                                 {
@@ -85,6 +91,12 @@ public class EnemyHandler : MonoBehaviour, IDamageable
                                     data.material,
                                 };
         gameObject.transform.localScale = new Vector3(data.scale,data.scale,data.scale);
+
+
+        //here update agent speed as well so it calculates correctly 
+        //also update it's radius so it doesnt bump weirdly around things
+        agent.speed = currentSpeed;
+        agent.radius *= data.scale;
     }
 
     public void takeDamage(DamageInfo info)
@@ -112,7 +124,6 @@ public class EnemyHandler : MonoBehaviour, IDamageable
 
     public void ResetEnemy()
     {
-        //resets ALL stats to base stats
         currentHealth = currentMaxHealth;
         updateHealthBar();
     }

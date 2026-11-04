@@ -950,8 +950,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.42696047
-      value: 0.33658487
+      time: 0.5092969
+      value: 0.37668496
       inSlope: 1.0854466
       outSlope: 1.0854466
       tangentMode: 0
@@ -959,8 +959,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.7257663
-      value: 0.8683588
+      time: 0.71557343
+      value: 0.8633463
       inSlope: -0.19295137
       outSlope: -0.19295137
       tangentMode: 0
@@ -968,8 +968,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.9951172
-      value: 0.4968972
+      time: 1.0002441
+      value: 0.5995889
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1003,7 +1003,7 @@ MonoBehaviour:
   enemyHealthScaler: 0.1
   enemyArmorScaler: 0.01
   enemyDamageScaler: 0.01
-  currentWave: 0
+  currentWave: 4
   currentNumberOfEnemiesAlive: 0
   spawner: {fileID: 1391172379}
 --- !u!1 &1409087689
@@ -1036,7 +1036,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409087689}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 28a589dde1be53b4184d943d281615c5, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1118,7 +1118,7 @@ Transform:
   m_GameObject: {fileID: 1409087689}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 3.27, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1133,7 +1133,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409087689}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 50
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
