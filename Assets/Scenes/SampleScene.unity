@@ -1165,11 +1165,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   speed: 5
+  dashSpeed: 30
+  dashCooldown: 2
+  dashTimer: 0
+  dashDuration: 0.15
   moveAction:
     m_Name: Move
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: ddbd0628-9fd7-425e-94e4-93732521cbbf
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+    m_Priority: 0
+  dashAction:
+    m_Name: Dash
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 7422f4b0-c59d-4aa7-8450-ed904f523109
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
