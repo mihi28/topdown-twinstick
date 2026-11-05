@@ -1,18 +1,27 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
+
 
 public class EnemyAI : MonoBehaviour
 {
+    [Header("Swarm Settings")]
+    [SerializeField] private float separationRadius; // Should match Agent Radius
+    [SerializeField] private float separationForce = 5f;
+
+    public enum State {Chase,Windup, Attack, Cooldown, Dead};
+    [Header("AI Behaviour Settings")]
+    [field: SerializeField] public State currentState {get; private set;}
+    [SerializeField] private float timeUntilNextAttack;
+
     [Header("Components")]
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private EnemyHandler handler;
     [SerializeField] public GameObject target;
     [SerializeField] private Rigidbody rb;
 
-    [Header("Swarm Settings")]
-    [SerializeField] private float separationRadius; // Should match Agent Radius
-    [SerializeField] private float separationForce = 5f;
+    private Coroutine attackCoroutine;
 
     // Timer to prevent calculating paths every single frame
     private float pathUpdateDelay = 0.2f;
@@ -29,18 +38,27 @@ public class EnemyAI : MonoBehaviour
     {
         target = GameObject.FindWithTag("Player"); 
         separationRadius = agent.radius;
+
+        currentState = State.Chase;
     }
 
     void Update()
     {
-        if (target == null) return;
 
-        // Update the path periodically rather than every frame
-        pathUpdateTimer += Time.deltaTime;
-        if (pathUpdateTimer >= pathUpdateDelay)
+        switch (currentState)
         {
-            agent.SetDestination(target.transform.position);
-            pathUpdateTimer = 0f;
+            case State.Chase:
+                agent.isStopped = false;
+                HandleMovement();
+                CheckAttackRange();
+
+                timeUntilNextAttack = Mathf.Max(0, timeUntilNextAttack - Time.deltaTime);
+                break;
+
+            default:
+                agent.isStopped = true;
+                break;
+            
         }
 
         // Manual Swarm Separation
@@ -58,5 +76,74 @@ public class EnemyAI : MonoBehaviour
                 transform.Translate(pushDirection.normalized * (separationForce * Time.deltaTime), Space.World);
             }
         }
+
     }
+
+    private void CheckAttackRange()
+    {
+        if(Vector3.Distance(transform.position, target.transform.position) <= handler.attackRange && timeUntilNextAttack <= 0f)
+        {
+            StartAttackSequence();
+        }
+    }
+
+    private void HandleMovement()
+    {
+        if (target == null) return;
+
+        // Update the path periodically rather than every frame
+        pathUpdateTimer += Time.deltaTime;
+        if (pathUpdateTimer >= pathUpdateDelay)
+        {
+            agent.SetDestination(target.transform.position);
+            pathUpdateTimer = 0f;
+        }
+
+    }
+
+    private void StartAttackSequence()
+    {
+        if(currentState == State.Chase)
+        {
+            attackCoroutine = StartCoroutine(AttackTimeline());
+            timeUntilNextAttack = handler.timeBetweenAttacks;
+        }
+    }
+
+    private IEnumerator AttackTimeline()
+    {
+        currentState = State.Windup;
+        //show the attack telegraph
+        //set enemy animation to windup
+        yield return new WaitForSeconds(handler.enemyData.attackWindupTime);
+
+        currentState = State.Attack;
+        //show attack 
+        //set animation to attacking
+        handler.enemyAttackLogic.ExecuteAttack(transform, target.transform, handler.enemyData);
+        yield return new WaitForSeconds(handler.enemyData.attackDuration);
+
+        currentState = State.Cooldown;
+        //set animation to cooldown or like idle
+        yield return new WaitForSeconds(handler.enemyData.attackCooldown);
+
+        currentState = State.Chase;
+    }
+
+    public void ForceInterruptAttackCoroutine(State newState)
+    {
+        if(attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
+
+        currentState = newState;
+
+        if (agent.isOnNavMesh)
+        {
+            agent.isStopped = true;
+        }
+    }
+
 }

@@ -7,17 +7,23 @@ using UnityEngine.AI;
 public class EnemyHandler : MonoBehaviour, IDamageable
 {
     [Header("Stats")]
+    [field: SerializeField] public EnemyData enemyData {get; private set;}
     [SerializeField] private float currentMaxHealth;
     [SerializeField] private float currentHealth;
     [SerializeField] private float currentArmour;
-    [SerializeField] private float currentDamage;
+    [field: SerializeField] public float currentDamage {get; private set;}
     [field: SerializeField] public float currentSpeed {get; private set;}
     [SerializeField] public bool isElite;
 
-    [Header("AI Behavior Stats")]
-    //[field: SerializeField] public EnemyAttackType AttackType { get; private set; }
-    //[field: SerializeField] public float attackRange { get; private set; }
-    //[field: SerializeField] public float attackCooldown { get; private set; }
+    [Header("Attack")]
+    [SerializeField] private EnemyAI enemyAI;
+    [field: SerializeField] public EnemyAttackSO enemyAttackLogic { get; private set; }
+    [field: SerializeField] public EnemyAttackType attackType { get; private set; }
+    [field: SerializeField] public float attackRange { get; private set; }
+    [field: SerializeField] public float attackDuration { get; private set; }
+    [field: SerializeField] public float attackWindupTime { get; private set; }
+    [field: SerializeField] public float attackCooldown { get; private set; }
+    [field: SerializeField] public float timeBetweenAttacks { get; private set; }
 
 
     [Header("Components")] 
@@ -30,6 +36,7 @@ public class EnemyHandler : MonoBehaviour, IDamageable
     {
         meshRenderer = GetComponent<MeshRenderer>();
         agent = GetComponent<NavMeshAgent>();
+        enemyAI = GetComponent<EnemyAI>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -47,6 +54,7 @@ public class EnemyHandler : MonoBehaviour, IDamageable
     public void SetupEnemy(EnemyData data)
     {
         //function that applies scriptable object data onto the enemy
+        enemyData = data;
 
         currentMaxHealth = data.maxHealth;
         currentHealth = data.maxHealth;
@@ -55,15 +63,26 @@ public class EnemyHandler : MonoBehaviour, IDamageable
         currentSpeed = data.speed;
         isElite = false;
 
+        //setup agent speed so it calculates it's path correctly
+        agent.speed = currentSpeed;
+        agent.radius = data.scale; //reset radius to base level
+
+        //AI Behaviour Setup
+        enemyAttackLogic = data.attackData;
+        attackType = data.enemyAttackType;
+        attackRange = data.attackRange;     
+        agent.stoppingDistance = attackRange;
+        attackWindupTime = data.attackWindupTime;
+        attackDuration = data.attackDuration;
+        attackCooldown = data.attackCooldown;
+        timeBetweenAttacks = data.timeBetweenAttacks;
+
         //visual part
         meshRenderer.materials = new Material[]
                                 {
                                     data.material
                                 };
         gameObject.transform.localScale = new Vector3(data.scale,data.scale,data.scale);
-
-        //setup agent speed so it calculates it's path correctly
-        agent.speed = currentSpeed;
     }
 
     public void ApplyWaveScaling(float hpMult, float armorMult, float dmgMult)
@@ -84,6 +103,16 @@ public class EnemyHandler : MonoBehaviour, IDamageable
         currentSpeed *= data.speedMultiplier;
         isElite = true;
 
+        //here update agent speed as well so it calculates correctly 
+        //also update it's radius so it doesnt bump weirdly around things
+        agent.speed = currentSpeed;
+        agent.radius *= data.scale;
+
+        //modify ai behaviour based on elite stats
+        attackRange *= data.attackRangeMultiplier;
+        agent.stoppingDistance = attackRange;
+        timeBetweenAttacks *= data.timeBetweenAttacksMultiplier;
+
         //visual part
         meshRenderer.materials = new Material[]
                                 {
@@ -92,11 +121,6 @@ public class EnemyHandler : MonoBehaviour, IDamageable
                                 };
         gameObject.transform.localScale = new Vector3(data.scale,data.scale,data.scale);
 
-
-        //here update agent speed as well so it calculates correctly 
-        //also update it's radius so it doesnt bump weirdly around things
-        agent.speed = currentSpeed;
-        agent.radius *= data.scale;
     }
 
     public void takeDamage(DamageInfo info)
@@ -131,5 +155,6 @@ public class EnemyHandler : MonoBehaviour, IDamageable
     {
         WaveManager.Instance.OnEnemyDeath();
         EnemyPool.Instance.ReturnEnemy(gameObject);
+        enemyAI.ForceInterruptAttackCoroutine(EnemyAI.State.Dead);
     }
 }

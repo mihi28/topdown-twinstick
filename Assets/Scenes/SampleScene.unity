@@ -1003,7 +1003,7 @@ MonoBehaviour:
   enemyHealthScaler: 0.1
   enemyArmorScaler: 0.01
   enemyDamageScaler: 0.01
-  currentWave: 4
+  currentWave: 0
   currentNumberOfEnemiesAlive: 0
   spawner: {fileID: 1391172379}
 --- !u!1 &1409087689
