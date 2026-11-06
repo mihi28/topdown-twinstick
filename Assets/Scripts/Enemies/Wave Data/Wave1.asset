@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Wave1
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
   waveNumber: 1
-  roster: {fileID: 11400000, guid: 568d63c85b4c04a42a5f07f3bdeea769, type: 2}
+  roster: {fileID: 11400000, guid: 9b97f7bcabc5a124cb1638216207c042, type: 2}
   availableElites: []
   eliteSpawnChance: 0

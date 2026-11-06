@@ -68,6 +68,7 @@ public class EnemyHandler : MonoBehaviour, IDamageable
         agent.radius = data.scale; //reset radius to base level
 
         //AI Behaviour Setup
+        enemyAI.ResumeChase();
         enemyAttackLogic = data.attackData;
         attackType = data.enemyAttackType;
         attackRange = data.attackRange;     

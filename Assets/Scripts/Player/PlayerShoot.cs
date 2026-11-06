@@ -12,12 +12,10 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] private float fireCd;
 
     [Header("Components")]
-    //[SerializeField] private GameObject player;
+    [SerializeField] private Material playerBulletMaterial;
     [SerializeField] private InputAction shootAction;
     [SerializeField] private PlayerAim _playerAimScript;
     [SerializeField] private PlayerStats _stats;
-    //[SerializeField] private GameObject origin;
-    //[SerializeField] private GameObject bullet;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -52,6 +50,7 @@ public class PlayerShoot : MonoBehaviour
         BulletLogic bulletScript = bullet.GetComponent<BulletLogic>();
         bulletScript.InitializeBullet(
             "Player",
+            playerBulletMaterial,
             _stats.bulletVelocity, 
             //player.GetComponent<PlayerMovement>().getPlayerVelocity(),
             _stats.range, 

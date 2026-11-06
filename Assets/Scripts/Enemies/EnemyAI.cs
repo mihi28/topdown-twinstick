@@ -6,6 +6,11 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
+    //this whole script is basically a simple state machine ai. the agic about attacking comes from the scriptable objects mostly
+    //this whole codebase is starting to get pretty complicated i m barely keeping up with it
+    //basically this script stops the enemy from chasing around the player if it's within attack range. 
+    //multiple states so i can actually keep track of whats hapenning with the enemy and be able to set animations later
+
     [Header("Swarm Settings")]
     [SerializeField] private float separationRadius; // Should match Agent Radius
     [SerializeField] private float separationForce = 5f;
@@ -44,7 +49,7 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-
+            //just checks which state it's in and gives it instructions on what to do
         switch (currentState)
         {
             case State.Chase:
@@ -80,7 +85,8 @@ public class EnemyAI : MonoBehaviour
     }
 
     private void CheckAttackRange()
-    {
+    {   
+        //checks if the enemy is withtin attack range and if it can attack and then spits out it starts the sequence
         if(Vector3.Distance(transform.position, target.transform.position) <= handler.attackRange && timeUntilNextAttack <= 0f)
         {
             StartAttackSequence();
@@ -89,6 +95,7 @@ public class EnemyAI : MonoBehaviour
 
     private void HandleMovement()
     {
+        //handles nav mesh movement
         if (target == null) return;
 
         // Update the path periodically rather than every frame
@@ -98,11 +105,13 @@ public class EnemyAI : MonoBehaviour
             agent.SetDestination(target.transform.position);
             pathUpdateTimer = 0f;
         }
+        transform.rotation.SetLookRotation(target.transform.position);
 
     }
 
     private void StartAttackSequence()
     {
+        //starts a coroutine (dont really understand what those are rn)
         if(currentState == State.Chase)
         {
             attackCoroutine = StartCoroutine(AttackTimeline());
@@ -144,6 +153,11 @@ public class EnemyAI : MonoBehaviour
         {
             agent.isStopped = true;
         }
+    }
+
+    public void ResumeChase()
+    {
+        currentState = State.Chase;
     }
 
 }

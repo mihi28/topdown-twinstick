@@ -20,10 +20,11 @@ public class BulletLogic : MonoBehaviour
     
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
-
+    [SerializeField] private MeshRenderer meshRenderer; 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        //meshRenderer = GetComponent<MeshRenderer>();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -31,8 +32,12 @@ public class BulletLogic : MonoBehaviour
         //currentLifetime = lifetime;
     }
 
-    public void InitializeBullet(string passedOwner, float passedVelocity, float passedLifetime, float passedDamage, float passedCritChance, float passedCritMult)
+    public void InitializeBullet(string passedOwner,Material passedMaterial, float passedVelocity, float passedLifetime, float passedDamage, float passedCritChance, float passedCritMult)
     {
+        //reset forces
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
         owner = passedOwner;
         velocity = passedVelocity;
         currentLifetime = passedLifetime;
@@ -50,6 +55,9 @@ public class BulletLogic : MonoBehaviour
         {
             gameObject.layer = 10; //enemybullet layer
         }
+
+        //insantiate it's material (change to mesh later)
+        meshRenderer.materials = new Material[]{passedMaterial};
     }
 
     // Update is called once per frame

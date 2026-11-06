@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1989452155852334225}
   - component: {fileID: 5242953896447242668}
   - component: {fileID: 2938956808634399533}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: BulletRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,6 +55,7 @@ MonoBehaviour:
   critChance: 50
   critMultiplier: 2
   rb: {fileID: 2938956808634399533}
+  meshRenderer: {fileID: 3954433973135921908}
 --- !u!135 &5242953896447242668
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -114,7 +115,7 @@ GameObject:
   - component: {fileID: 9124276398759297597}
   - component: {fileID: 3222724463761443066}
   - component: {fileID: 3954433973135921908}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

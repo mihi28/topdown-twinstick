@@ -15,3 +15,5 @@ MonoBehaviour:
   availableEnemies:
   - enemyData: {fileID: 11400000, guid: ec9aff60ac36e38459fbd66f9c04bca4, type: 2}
     cost: 1
+  - enemyData: {fileID: 11400000, guid: ffca40b229db7a748a1fcd5951f97a29, type: 2}
+    cost: 3

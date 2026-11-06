@@ -515,6 +515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShoot
   fireRate: 0.5
   fireCd: 0
+  playerBulletMaterial: {fileID: 2100000, guid: a661630df26ce9b42904a3c94ae91c8b, type: 2}
   shootAction:
     m_Name: Shoot
     m_Type: 0
@@ -928,6 +929,7 @@ MonoBehaviour:
   defaultWave: {fileID: 11400000, guid: c98ebae44068e7946a8cf796078b5da9, type: 2}
   specialWaves:
   - {fileID: 11400000, guid: 4327ec949f1296848bc0688d6cd84496, type: 2}
+  - {fileID: 11400000, guid: 1aba156031455cc4982bd98f6147f190, type: 2}
   currentEnemyRoster: {fileID: 0}
   currentAvailableElites: []
   currentEliteSpawnChance: 0
@@ -1003,7 +1005,7 @@ MonoBehaviour:
   enemyHealthScaler: 0.1
   enemyArmorScaler: 0.01
   enemyDamageScaler: 0.01
-  currentWave: 0
+  currentWave: 2
   currentNumberOfEnemiesAlive: 0
   spawner: {fileID: 1391172379}
 --- !u!1 &1409087689

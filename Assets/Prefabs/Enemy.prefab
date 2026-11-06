@@ -425,12 +425,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd7034e2caa3dfe4383a35271376c93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
+  <enemyData>k__BackingField: {fileID: 0}
   currentMaxHealth: 0
   currentHealth: 0
   currentArmour: 0
-  currentDamage: 0
+  <currentDamage>k__BackingField: 0
   <currentSpeed>k__BackingField: 0
   isElite: 0
+  enemyAI: {fileID: 0}
+  <enemyAttackLogic>k__BackingField: {fileID: 0}
+  <attackType>k__BackingField: 0
+  <attackRange>k__BackingField: 0
+  <attackDuration>k__BackingField: 0
+  <attackWindupTime>k__BackingField: 0
+  <attackCooldown>k__BackingField: 0
+  <timeBetweenAttacks>k__BackingField: 0
   healthBarFill: {fileID: 6487698385168941782}
   meshRenderer: {fileID: 0}
   agent: {fileID: 0}
@@ -468,9 +477,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7359c8a29d00e7541b14df920ead34ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  separationRadius: 0
+  separationForce: 3
+  <currentState>k__BackingField: 0
+  timeUntilNextAttack: 0
   agent: {fileID: 0}
   handler: {fileID: 0}
   target: {fileID: 0}
   rb: {fileID: 0}
-  separationRadius: 0
-  separationForce: 3

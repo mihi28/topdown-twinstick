@@ -15,7 +15,9 @@ MonoBehaviour:
   eliteType: Speedy
   healthMultiplier: 0.5
   armourMultiplier: 1
-  damageMultiplier: 1
+  damageMultiplier: 0.5
   speedMultiplier: 2
+  attackRangeMultiplier: 0.7
+  timeBetweenAttacksMultiplier: 0.7
   material: {fileID: 2100000, guid: 7dda13182815113458f0c4542feb0560, type: 2}
   scale: 0.7

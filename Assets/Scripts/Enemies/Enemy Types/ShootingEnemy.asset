@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e14ba8d2a253c4182ba688d18ea6e6, type: 3}
+  m_Name: ShootingEnemy
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  enemyName: Shooter
+  maxHealth: 70
+  armour: 2
+  speed: 4
+  damage: 20
+  isElite: 0
+  attackData: {fileID: 11400000, guid: 37f05c6fbb4aadb4fbe97861a154b833, type: 2}
+  enemyAttackType: 1
+  attackRange: 10
+  attackWindupTime: 1
+  attackDuration: 0.5
+  attackCooldown: 0.3
+  timeBetweenAttacks: 3
+  material: {fileID: 2100000, guid: 8f825abe65992e24fba576db79b91ea0, type: 2}
+  scale: 1

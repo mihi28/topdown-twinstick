@@ -17,5 +17,7 @@ MonoBehaviour:
   armourMultiplier: 0.5
   damageMultiplier: 0.5
   speedMultiplier: 0.5
+  attackRangeMultiplier: 1.5
+  timeBetweenAttacksMultiplier: 1.5
   material: {fileID: 2100000, guid: 859045517a8b0164c8e337d589a85d00, type: 2}
   scale: 1.5
