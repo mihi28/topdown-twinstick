@@ -99,7 +99,7 @@ public class EnemySpawner : MonoBehaviour
         isSpawning = true;
         waveTimer = 0; 
         spawnCooldown = 1f; //brief delay before starting to sapwn
-        numberOfAvailableCredits = maxNumberOfCreditsForThisWave;
+        numberOfAvailableCredits += maxNumberOfCreditsForThisWave; //credits leftover from last round get added
 
     }
 
@@ -133,52 +133,60 @@ public class EnemySpawner : MonoBehaviour
         //spawns an enemy on a random position on the map
         //modifies their stats according to wave manager multipliers
 
-        GameObject enemyEntity = EnemyPool.Instance.GetEnemy(ChooseSpawnLocation());
+        //first choose which enemy to spawn
+        EnemySpawnCost enemyToSpawn = ChooseEnemyToSpawn(numberOfAvailableCredits);
 
-        if(enemyEntity.TryGetComponent(out EnemyHandler handler))
+        //if it's different than null then we can spawn an enemy, otherwise no more enemies and the wave is ended
+
+        if(enemyToSpawn != null)
         {
-            //first choose which enemy to spawn
-            EnemySpawnCost enemyToSpawn = ChooseEnemyToSpawn(numberOfAvailableCredits);
+            GameObject enemyEntity = EnemyPool.Instance.GetEnemy(ChooseSpawnLocation());
+            EnemyHandler handler = enemyEntity.GetComponent<EnemyHandler>();
 
-            //if it's different than null then we can spawn an enemy, otherwise no more enemies and the wave is ended
+            int totalCost = enemyToSpawn.cost;
 
-            if(enemyToSpawn != null)
+            //elite upgrade cost is 50% rounded up, might change that later
+            int eliteUpgradeCost = Mathf.CeilToInt(enemyToSpawn.cost * 0.5f);
+
+            //dress up enemy entity with chosen enemy data
+            handler.SetupEnemy(enemyToSpawn.enemyData);
+
+            //roll for elite spawn chance, if we can afford the elite upgrade
+            if(totalCost + eliteUpgradeCost <= numberOfAvailableCredits)
             {
-                int totalCost = enemyToSpawn.cost;
-
-                //elite upgrade cost is 50% rounded up, might change that later
-                int eliteUpgradeCost = Mathf.CeilToInt(enemyToSpawn.cost * 0.5f);
-
-                //dress up enemy entity with chosen enemy data
-                handler.SetupEnemy(enemyToSpawn.enemyData);
-
-                //roll for elite spawn chance, if we can afford the elite upgrade
-                if(totalCost + eliteUpgradeCost <= numberOfAvailableCredits)
+                //roll for elite upgrade
+                float randomEliteChanceRoll = Random.Range(0f,1f);
+                if(randomEliteChanceRoll <= currentEliteSpawnChance)
                 {
-                    //roll for elite upgrade
-                    float randomEliteChanceRoll = Random.Range(0f,1f);
-                    if(randomEliteChanceRoll <= currentEliteSpawnChance)
-                    {
-                        //choose a random elite archetype
-                        int randomIndex = Random.Range(0, currentAvailableElites.Count);
-                        handler.ApplyEliteStats(currentAvailableElites[randomIndex]);
+                    //choose a random elite archetype
+                    int randomIndex = Random.Range(0, currentAvailableElites.Count);
+                    handler.ApplyEliteStats(currentAvailableElites[randomIndex]);
 
-                        //apply elite ugrade cost
-                        totalCost += eliteUpgradeCost;
-                    }
-
-                    handler.ApplyWaveScaling(hpMult,armorMult,dmgMult);
+                    //apply elite ugrade cost
+                    totalCost += eliteUpgradeCost;
                 }
 
-                spawnCooldown = spawnDelay;
-                WaveManager.Instance.currentNumberOfEnemiesAlive++;
-                numberOfAvailableCredits -= totalCost;
-                
+                handler.ApplyWaveScaling(hpMult,armorMult,dmgMult);
             }
+
+            spawnCooldown = spawnDelay;
+            WaveManager.Instance.currentNumberOfEnemiesAlive++;
+            numberOfAvailableCredits -= totalCost;
             
         }
+        //omg the aabb error was happening because the spawner had credits and didnt know what to spawn becausse everything cost too much
+        else
+        {
+            //make it so the spawner gets enough credits to spawn the cheapest thing
+            // this works because the spawner already stops spawning when it gets to 0 credits so no infinite loop
 
+            //or save the credits in the bank for next wave.
+            //for now just save the credits for next round
+            StopSpawning();
+            return;
+        }
     }
+
 
     private Vector3 ChooseSpawnLocation()
     {
