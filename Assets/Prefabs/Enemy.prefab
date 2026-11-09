@@ -481,6 +481,10 @@ MonoBehaviour:
   separationForce: 3
   <currentState>k__BackingField: 0
   timeUntilNextAttack: 0
+  lineOfSightRadius: 0.5
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 2048
   agent: {fileID: 0}
   handler: {fileID: 0}
   target: {fileID: 0}

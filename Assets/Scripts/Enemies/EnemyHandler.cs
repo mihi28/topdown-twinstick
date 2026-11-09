@@ -72,7 +72,6 @@ public class EnemyHandler : MonoBehaviour, IDamageable
         enemyAttackLogic = data.attackData;
         attackType = data.enemyAttackType;
         attackRange = data.attackRange;     
-        agent.stoppingDistance = attackRange;
         attackWindupTime = data.attackWindupTime;
         attackDuration = data.attackDuration;
         attackCooldown = data.attackCooldown;
@@ -111,7 +110,6 @@ public class EnemyHandler : MonoBehaviour, IDamageable
 
         //modify ai behaviour based on elite stats
         attackRange *= data.attackRangeMultiplier;
-        agent.stoppingDistance = attackRange;
         timeBetweenAttacks *= data.timeBetweenAttacksMultiplier;
 
         //visual part
