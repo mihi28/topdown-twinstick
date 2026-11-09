@@ -17,3 +17,5 @@ MonoBehaviour:
     cost: 1
   - enemyData: {fileID: 11400000, guid: ffca40b229db7a748a1fcd5951f97a29, type: 2}
     cost: 3
+  - enemyData: {fileID: 11400000, guid: 121d2c5b85765d14ebeadac429a06970, type: 2}
+    cost: 4

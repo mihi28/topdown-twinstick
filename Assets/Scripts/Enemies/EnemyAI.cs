@@ -58,7 +58,7 @@ public class EnemyAI : MonoBehaviour
         switch (currentState)
         {
             case State.Chase:
-                agent.isStopped = false;
+                SetAgentStopped(false);
                 HandleMovement();
                 CheckAttackRange();
 
@@ -67,21 +67,26 @@ public class EnemyAI : MonoBehaviour
 
             case State.Windup:
             case State.Cooldown:
-                agent.isStopped = true;
+                SetAgentStopped(true);
                 FaceThePlayer();
+                HandleSwarmSeparation();
                 break;
 
             case State.Attack:
-                agent.isStopped = true;
+                SetAgentStopped(true);
                 //can change this later in case i want a tracking attack or something
                 break;
 
             default:
-                agent.isStopped = true;
+                SetAgentStopped(true);
                 break;
             
         }
 
+    }
+
+    private void HandleSwarmSeparation()
+    {
         // Manual Swarm Separation
         // Find all enemies immediately touching this one and push them away, or a player
         Collider[] nearbyEnemies = Physics.OverlapSphere(transform.position, separationRadius, LayerMask.GetMask("Enemy", "Player"));
@@ -97,13 +102,10 @@ public class EnemyAI : MonoBehaviour
                 transform.Translate(pushDirection.normalized * (separationForce * Time.deltaTime), Space.World);
             }
         }
-
     }
 
     private bool HasLineOfSight(float distance)
     {
-        
-
         // Shoot the Raycast
         // We limit the length to 'distanceToPlayer' so it doesn't accidentally hit a wall BEHIND the player.
         //use a spherecast so the ray is thicker
@@ -173,7 +175,7 @@ public class EnemyAI : MonoBehaviour
             pathUpdateTimer = 0f;
         }
         FaceThePlayer();
-
+        HandleSwarmSeparation();
     }
 
     private void FaceThePlayer()
@@ -245,5 +247,14 @@ public class EnemyAI : MonoBehaviour
     {
         currentState = State.Chase;
     }
+
+    private void SetAgentStopped(bool stop)
+{
+    // Only give the command if the agent is fully awake and on the mesh
+    if (agent != null && agent.isActiveAndEnabled && agent.isOnNavMesh)
+    {
+        agent.isStopped = stop;
+    }
+}
 
 }

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e14ba8d2a253c4182ba688d18ea6e6, type: 3}
+  m_Name: MeleeEnemy
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  enemyName: MeleeEnemy
+  maxHealth: 100
+  armour: 5
+  speed: 5.5
+  damage: 10
+  isElite: 0
+  attackData: {fileID: 11400000, guid: f7ff3e466a230c74abd6e2ebf88d7864, type: 2}
+  enemyAttackType: 0
+  attackRange: 2
+  attackWindupTime: 0.7
+  attackDuration: 1
+  attackCooldown: 0.4
+  timeBetweenAttacks: 3
+  material: {fileID: 2100000, guid: 72c60958fd0e2e3479fd5924279e5458, type: 2}
+  scale: 1
