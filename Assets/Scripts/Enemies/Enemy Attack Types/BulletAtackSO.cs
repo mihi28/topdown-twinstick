@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "BulletAtackSO", menuName = "Scriptable Objects/BulletAtackSO")]
@@ -7,7 +7,7 @@ public class BulletAtackSO : EnemyAttackSO
     [Header("Settings")]
     [SerializeField] private float bulletVelocity;
     [SerializeField] private float bulletLifetime;
-    [SerializeField] private Vector3 originOffset;
+    [SerializeField] private float playerPredictionMultiplier;
     [SerializeField] private Material enemyBulletMaterial;
 
     public override void ExecuteAttack(Transform attacker, Transform target, EnemyData data)
@@ -15,15 +15,18 @@ public class BulletAtackSO : EnemyAttackSO
         //get a bullet from the pool
         GameObject bullet = BulletPool.Instance.GetBullet();
 
-        //assign direction and origin of shot
-        Vector3 shootingDirection = attacker.forward;
-        Vector3 origin = attacker.transform.position + originOffset;
+        //get the velocity of the players rb to try and predict it a littlebit
+        Vector3 playerMovementDirection = target.GetComponent<Rigidbody>().linearVelocity;
 
-   /*     if (float.IsNaN(origin.x) || float.IsNaN(shootingDirection.x))
-{
-    Debug.LogError("MATH CORRUPTION DETECTED! Origin: " + origin + " Direction: " + shootingDirection);
-    return; // Stop before it crashes the Canvas!
-}*/
+        //get the distance so it's dynamic, the further the player the more it predicts
+        float distanceToPlayer = Vector3.Distance(attacker.position, target.position);
+
+        Vector3 predictionOffset = playerMovementDirection.normalized * distanceToPlayer * playerPredictionMultiplier;
+        Vector3 predictionPoint = target.position + predictionOffset;
+
+        //assign direction and origin of shot
+        Vector3 shootingDirection = (predictionPoint - attacker.position).normalized;
+        Vector3 origin = attacker.position;
 
         bullet.transform.position = origin;
         bullet.transform.forward = shootingDirection;
