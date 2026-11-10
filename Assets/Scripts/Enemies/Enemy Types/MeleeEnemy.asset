@@ -18,12 +18,13 @@ MonoBehaviour:
   speed: 5.5
   damage: 10
   isElite: 0
+  turnSpeed: 720
   attackData: {fileID: 11400000, guid: f7ff3e466a230c74abd6e2ebf88d7864, type: 2}
   enemyAttackType: 0
-  attackRange: 2
-  attackWindupTime: 0.7
-  attackDuration: 1
+  attackRange: 2.5
+  attackWindupTime: 0.3
+  attackDuration: 0.5
   attackCooldown: 0.4
-  timeBetweenAttacks: 3
+  timeBetweenAttacks: 2
   material: {fileID: 2100000, guid: 72c60958fd0e2e3479fd5924279e5458, type: 2}
   scale: 1

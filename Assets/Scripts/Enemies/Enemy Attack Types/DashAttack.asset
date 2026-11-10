@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bed12dac3f8a00a4386f0dd51ed98dd6, type: 3}
   m_Name: DashAttack
   m_EditorClassIdentifier: Assembly-CSharp::DashAttackSO
-  dashSpeed: 13
+  dashSpeed: 12
   dashDuration: 0.4
   dashDistance: 10
-  hitboxSize: 1
+  hitboxSize: 0.7
   obstacleMask:
     serializedVersion: 2
     m_Bits: 2048

@@ -14,6 +14,7 @@ public class EnemyData : ScriptableObject
     [SerializeField] public float speed;
     [SerializeField] public float damage;
     [SerializeField] public bool isElite;
+    [SerializeField] public float turnSpeed = 720f;
 
     [Header("Attacking Behaviour")]
     [SerializeField] public EnemyAttackSO attackData;

@@ -19,7 +19,7 @@ public class EnemyAI : MonoBehaviour
     public enum State {Chase,Windup, Attack, Cooldown, Dead};
     [Header("AI Behaviour Settings")]
     [field: SerializeField] public State currentState {get; private set;}
-    [SerializeField] private float timeUntilNextAttack;
+    [field: SerializeField] public float timeUntilNextAttack {get; set;}
     [SerializeField] private float lineOfSightRadius;
     [SerializeField] private LayerMask obstacleLayerMask;
 
@@ -192,7 +192,9 @@ public class EnemyAI : MonoBehaviour
 
         if (directionToPlayer != Vector3.zero)
         {
-            transform.rotation = Quaternion.LookRotation(directionToPlayer);
+            //rotate the enemy base on the speed of turning
+            Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, handler.currentTurnSpeed * Time.deltaTime);
         }
 
     }

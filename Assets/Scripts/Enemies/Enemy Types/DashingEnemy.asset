@@ -20,7 +20,7 @@ MonoBehaviour:
   isElite: 0
   attackData: {fileID: 11400000, guid: 190f312e0e829ec48914e49a65abef0b, type: 2}
   enemyAttackType: 0
-  attackRange: 4
+  attackRange: 5
   attackWindupTime: 0.8
   attackDuration: 2
   attackCooldown: 0.4

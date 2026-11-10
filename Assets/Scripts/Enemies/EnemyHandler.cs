@@ -12,7 +12,8 @@ public class EnemyHandler : MonoBehaviour, IDamageable
     [SerializeField] private float currentHealth;
     [SerializeField] private float currentArmour;
     [field: SerializeField] public float currentDamage {get; private set;}
-    [field: SerializeField] public float currentSpeed {get; private set;}
+    [field: SerializeField] public float currentSpeed {get; set;}
+    [field: SerializeField] public float currentTurnSpeed {get; set;}
     [SerializeField] public bool isElite;
 
     [Header("Attack")]
@@ -61,6 +62,7 @@ public class EnemyHandler : MonoBehaviour, IDamageable
         currentArmour = data.armour;
         currentDamage = data.damage;
         currentSpeed = data.speed;
+        currentTurnSpeed = data.turnSpeed;
         isElite = false;
 
         //setup agent speed so it calculates it's path correctly
@@ -69,6 +71,7 @@ public class EnemyHandler : MonoBehaviour, IDamageable
 
         //AI Behaviour Setup
         enemyAI.ResumeChase();
+        enemyAI.timeUntilNextAttack = 1;
         enemyAttackLogic = data.attackData;
         attackType = data.enemyAttackType;
         attackRange = data.attackRange;     
@@ -83,6 +86,13 @@ public class EnemyHandler : MonoBehaviour, IDamageable
                                     data.material
                                 };
         gameObject.transform.localScale = new Vector3(data.scale,data.scale,data.scale);
+
+        //make the shield prefab inactive
+        Transform shield = transform.Find("ShieldRoot");
+        if (shield != null)
+        {
+            shield.gameObject.SetActive(false);
+        }
     }
 
     public void ApplyWaveScaling(float hpMult, float armorMult, float dmgMult)

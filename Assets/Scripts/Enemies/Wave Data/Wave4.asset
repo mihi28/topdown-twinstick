@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc0e3de2e4f3174e869443025c580c3, type: 3}
+  m_Name: Wave4
+  m_EditorClassIdentifier: Assembly-CSharp::WaveData
+  waveNumber: 4
+  roster: {fileID: 11400000, guid: 80a13437280c4f640ac54739ee0a0d12, type: 2}
+  availableElites:
+  - {fileID: 11400000, guid: 8d5c17c450068c949a8cfbe67c7c65c3, type: 2}
+  - {fileID: 11400000, guid: 6e759b336c5075d46b3cf5a48b85c3ce, type: 2}
+  eliteSpawnChance: 0.5
