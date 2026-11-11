@@ -16,6 +16,9 @@ public class EliteData : ScriptableObject
     //public float attackDurationMultiplier;
     public float timeBetweenAttacksMultiplier;
 
+    [Header("Death Rattle Effect")]
+    public AbstractDeathRattleSO deathRattleInfo;
+
     [Header("Visual")]
     public Material material;
     //public Color color;

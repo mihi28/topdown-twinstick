@@ -24,6 +24,9 @@ public class EnemyData : ScriptableObject
     [SerializeField] public float attackDuration; //time for attack to resolve
     [SerializeField] public float attackCooldown; //time before returning to chase
     [SerializeField] public float timeBetweenAttacks; //time before being able to launch another attack
+
+    [Header("Death Rattle Effect")]
+    [SerializeField] public AbstractDeathRattleSO deathRattleInfo; //triggers on death
     
     [Header("Visual")]
     [SerializeField] public Material material;

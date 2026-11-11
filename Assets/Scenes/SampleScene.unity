@@ -932,6 +932,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1aba156031455cc4982bd98f6147f190, type: 2}
   - {fileID: 11400000, guid: 4d52ec5fed5f0244da72f971623e5f25, type: 2}
   - {fileID: 11400000, guid: d2aef616d921e0c41a9d23309c82b47c, type: 2}
+  - {fileID: 11400000, guid: 0f34616533fc013409d0a291527decb7, type: 2}
   currentEnemyRoster: {fileID: 0}
   currentAvailableElites: []
   currentEliteSpawnChance: 0
@@ -1007,7 +1008,7 @@ MonoBehaviour:
   enemyHealthScaler: 0.1
   enemyArmorScaler: 0.01
   enemyDamageScaler: 0.01
-  currentWave: 7
+  currentWave: 5
   currentNumberOfEnemiesAlive: 0
   spawner: {fileID: 1391172379}
 --- !u!1 &1409087689

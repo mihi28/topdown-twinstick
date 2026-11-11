@@ -1,7 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "AbstractDeathRattleSO", menuName = "Scriptable Objects/AbstractDeathRattleSO")]
-public class AbstractDeathRattleSO : ScriptableObject
+public abstract class AbstractDeathRattleSO : ScriptableObject
 {
-    
+    public abstract void ExecuteDeathRattle(Transform attacker);
 }

@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
   waveNumber: 1
   roster: {fileID: 11400000, guid: 9b97f7bcabc5a124cb1638216207c042, type: 2}
-  availableElites: []
-  eliteSpawnChance: 0
+  availableElites:
+  - {fileID: 11400000, guid: 9f6b5d1da9e09704a933833ea1bfceab, type: 2}
+  eliteSpawnChance: 0.5

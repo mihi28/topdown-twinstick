@@ -26,6 +26,9 @@ public class EnemyHandler : MonoBehaviour, IDamageable
     [field: SerializeField] public float attackCooldown { get; private set; }
     [field: SerializeField] public float timeBetweenAttacks { get; private set; }
 
+    [Header("Death Rattle")]
+    [SerializeField] public AbstractDeathRattleSO deathRattle = null;
+
 
     [Header("Components")] 
     //[SerializeField] private EnemyData _basestats;
@@ -93,6 +96,9 @@ public class EnemyHandler : MonoBehaviour, IDamageable
         {
             shield.gameObject.SetActive(false);
         }
+
+        //apply death rattle effect
+        deathRattle = data.deathRattleInfo;
     }
 
     public void ApplyWaveScaling(float hpMult, float armorMult, float dmgMult)
@@ -130,10 +136,21 @@ public class EnemyHandler : MonoBehaviour, IDamageable
                                 };
         gameObject.transform.localScale = new Vector3(data.scale,data.scale,data.scale);
 
+        //if the enemy already has a death rattle effect, then elite death rattle doesnt apply? it gets overriden? or maybe it might stack?
+        //idk for now it just doesnt apply
+
+        if(deathRattle == null)
+        {
+            deathRattle = data.deathRattleInfo;
+        }
     }
 
     public void takeDamage(DamageInfo info)
     {
+        //if the enemy is dead it cant take damage
+        if(enemyAI.currentState == EnemyAI.State.Dead)
+            return;
+
         float actualDamage = info.amount - currentArmour;
 
         currentHealth -= actualDamage;
@@ -160,10 +177,20 @@ public class EnemyHandler : MonoBehaviour, IDamageable
         currentHealth = currentMaxHealth;
         updateHealthBar();
     }
-    private void Die()
+    public void Die()
     {
+        if(enemyAI.currentState == EnemyAI.State.Dead)
+            return;
+
+        //lock the enemy into dead instantly so no more memory leaks
+        enemyAI.ForceInterruptAttackCoroutine(EnemyAI.State.Dead);
+
+        //execute death rattle
+        if(deathRattle != null)
+            deathRattle.ExecuteDeathRattle(transform);
+
+        //reset all of everything, make it go back into the pool, update wave info
         WaveManager.Instance.OnEnemyDeath();
         EnemyPool.Instance.ReturnEnemy(gameObject);
-        enemyAI.ForceInterruptAttackCoroutine(EnemyAI.State.Dead);
     }
 }
