@@ -4,7 +4,8 @@ using UnityEngine;
 public class ExplosionDeath : AbstractDeathRattleSO
 {
     [Header("Settings")]
-    [SerializeField] float explosionDamage;
+    [SerializeField] float explosionPlayerDamage;
+    [SerializeField] float explosionEnemyDamage;
     [SerializeField] float explosionRadius;
     [SerializeField] LayerMask targetLayerMask;
 
@@ -21,13 +22,23 @@ public class ExplosionDeath : AbstractDeathRattleSO
             if (hit.transform == attacker || hit.gameObject == attacker.gameObject) 
                 continue;
 
+            //comb through hits, damage targets based on their tag
+            //enemies should take less than the player
             if(hit.TryGetComponent(out IDamageable damageableTarget))
             {
-                Debug.Log("took damage from explosion");
-                DamageInfo damageInfo = new DamageInfo{
-                    amount = explosionDamage,
-                    isCritical = false
-                };
+                DamageInfo damageInfo = new DamageInfo{};
+
+                if (hit.CompareTag("Enemy"))
+                {
+                    Debug.Log("enemy took damage from explosion");
+                    damageInfo.amount = explosionEnemyDamage;
+                }
+                
+                else if (hit.CompareTag("Player"))
+                {
+                    Debug.Log("player took damage from explosion");
+                    damageInfo.amount = explosionPlayerDamage;
+                }
                 
                 damageableTarget.takeDamage(damageInfo);
             }

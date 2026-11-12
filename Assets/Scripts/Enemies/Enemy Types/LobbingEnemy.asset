@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e14ba8d2a253c4182ba688d18ea6e6, type: 3}
+  m_Name: LobbingEnemy
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  enemyName: 
+  maxHealth: 80
+  armour: 2
+  speed: 4
+  damage: 0
+  isElite: 1
+  turnSpeed: 720
+  attackData: {fileID: 11400000, guid: 2a4a5e8329c747c48a1e24bded5ec8be, type: 2}
+  enemyAttackType: 1
+  attackRange: 6
+  attackWindupTime: 0.6
+  attackDuration: 0.3
+  attackCooldown: 0.8
+  timeBetweenAttacks: 4
+  deathRattleInfo: {fileID: 0}
+  material: {fileID: 2100000, guid: 14d370ec2ab39054aae2a61e2dda49d2, type: 2}
+  scale: 1

@@ -59,7 +59,9 @@ public class PlayerHandler : MonoBehaviour, IDamageable
         if(isDead)
             return;
 
-        float actualDamage = info.amount - currentArmour;
+        float actualDamage = info.amount;
+        if(!info.ignoreArmour)
+            actualDamage -= currentArmour;
 
         currentHealth -= actualDamage;
 
