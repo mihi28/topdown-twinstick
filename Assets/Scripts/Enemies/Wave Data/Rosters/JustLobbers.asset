@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fac688bb5ba406b438adab627195a461, type: 3}
   m_Name: JustLobbers
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRoster
-  availableEnemies: []
+  availableEnemies:
+  - enemyData: {fileID: 11400000, guid: 5e7cf5c6f25ed5d468745feba7139bcc, type: 2}
+    cost: 4

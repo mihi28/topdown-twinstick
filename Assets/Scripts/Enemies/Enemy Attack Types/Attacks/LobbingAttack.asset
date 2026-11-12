@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd34deb4cfee63541892eb747043bcd1, type: 3}
   m_Name: LobbingAttack
   m_EditorClassIdentifier: Assembly-CSharp::LobbingAttack
-  poolRadius: 0
-  playerDamage: 0
-  enemyDamage: 0
-  poolDuration: 0
-  tickDamageFrequency: 0
+  poolRadius: 5
+  playerDamage: 30
+  enemyDamage: 50
+  poolDuration: 4
+  tickDamageFrequency: 0.2
   targetLayerMask:
     serializedVersion: 2
-    m_Bits: 0
-  playerPredictionMultiplier: 0
+    m_Bits: 640
+  playerPredictionMultiplier: 0.5

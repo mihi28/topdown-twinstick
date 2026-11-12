@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200def9d4c942364a922a36c2616258e, type: 3}
   m_Name: ExplosionDeath
   m_EditorClassIdentifier: Assembly-CSharp::ExplosionDeath
-  explosionDamage: 50
-  explosionRadius: 4
+  explosionPlayerDamage: 40
+  explosionEnemyDamage: 30
+  explosionRadius: 5
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 640
