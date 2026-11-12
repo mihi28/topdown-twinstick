@@ -20,8 +20,14 @@ public class MeleeAttackSO : EnemyAttackSO
             if (angleToTarget < (meleeConeAngle/ 2f))
             {
                 Debug.Log("playerHit by melee");
-                // HIT! 
-                // hit.GetComponent<PlayerHealth>().TakeDamage(stats.attackDamage);
+                
+                if(hit.TryGetComponent(out PlayerHandler playerHandler)){
+                        DamageInfo damageInfo = new DamageInfo
+                        {
+                            amount = data.damage
+                        };
+                        playerHandler.takeDamage(damageInfo);
+                }
             }
         }
 

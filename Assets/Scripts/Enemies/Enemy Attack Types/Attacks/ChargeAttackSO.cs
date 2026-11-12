@@ -73,7 +73,14 @@ public class DashAttackSO : EnemyAttackSO
                 {
                     alreadyHit.Add(hitCol);
                     Debug.Log("Player hit by dash!");
-                    // hitCol.GetComponent<PlayerHealth>().TakeDamage(data.attackDamage);
+
+                    if(hitCol.TryGetComponent(out PlayerHandler playerHandler)){
+                        DamageInfo damageInfo = new DamageInfo
+                        {
+                            amount = data.damage
+                        };
+                        playerHandler.takeDamage(damageInfo);
+                    }
                 }
             }
 

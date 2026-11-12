@@ -16,8 +16,10 @@ MonoBehaviour:
   - enemyData: {fileID: 11400000, guid: ec9aff60ac36e38459fbd66f9c04bca4, type: 2}
     cost: 1
   - enemyData: {fileID: 11400000, guid: ffca40b229db7a748a1fcd5951f97a29, type: 2}
-    cost: 3
+    cost: 2
   - enemyData: {fileID: 11400000, guid: 121d2c5b85765d14ebeadac429a06970, type: 2}
-    cost: 4
+    cost: 3
   - enemyData: {fileID: 11400000, guid: 9afa31d2e30781c498af3c6b2caf01f0, type: 2}
+    cost: 3
+  - enemyData: {fileID: 11400000, guid: 86b7ffe5c4741f04690f3cb596164b7e, type: 2}
     cost: 3

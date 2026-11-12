@@ -17,4 +17,5 @@ MonoBehaviour:
   availableElites:
   - {fileID: 11400000, guid: 8d5c17c450068c949a8cfbe67c7c65c3, type: 2}
   - {fileID: 11400000, guid: 6e759b336c5075d46b3cf5a48b85c3ce, type: 2}
+  - {fileID: 11400000, guid: 9f6b5d1da9e09704a933833ea1bfceab, type: 2}
   eliteSpawnChance: 0.05
